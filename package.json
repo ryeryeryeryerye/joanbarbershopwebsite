@@ -1,0 +1,29 @@
+{
+  "name": "barbershop-monorepo",
+  "version": "1.0.0",
+  "description": "BARBERSHOP – Website quản lý và đặt lịch cắt tóc trực tuyến",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:backend": "npm run dev --workspace=backend",
+    "build:frontend": "npm run build --workspace=frontend",
+    "build:backend": "npm run build --workspace=backend",
+    "lint:frontend": "npm run lint --workspace=frontend",
+    "lint:backend": "npm run lint --workspace=backend"
+  },
+  "keywords": [
+    "barbershop",
+    "booking",
+    "react",
+    "express",
+    "typescript",
+    "monorepo"
+  ],
+  "author": "",
+  "license": "ISC"
+}
+

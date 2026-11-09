@@ -1,0 +1,144 @@
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, User } from 'lucide-react';
+import logoImg from '@/assets/images/logo.jpg';
+
+export const Navbar: React.FC = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+
+  // State theo dõi mục đang được chọn
+  const [activeNav, setActiveNav] = useState<string>('TRANG CHỦ');
+
+  const navLinks = [
+    { name: 'TRANG CHỦ', path: '/' },
+    { name: 'DỊCH VỤ', path: '#services' },
+    { name: 'THỢ TÓC', path: '#barbers' },
+    { name: 'GIỚI THIỆU', path: '#about' },
+  ];
+
+  return (
+    <header className="sticky top-0 z-50 bg-dark-bg/95 backdrop-blur-md border-b border-dark-border">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        {/* PHẦN 1: LOGO BÊN TRÁI (KHÔNG CÓ TEXT) */}
+        <div className="w-40 sm:w-48 flex items-center justify-start flex-shrink-0">
+          <Link
+            to="/"
+            onClick={() => setActiveNav('TRANG CHỦ')}
+            className="flex items-center group transition-transform duration-200 hover:scale-105"
+            aria-label="JOAN BARBERSHOP"
+          >
+            <img
+              src={logoImg}
+              alt="JOAN BARBERSHOP"
+              className="h-16 w-auto object-contain transition-all duration-300 group-hover:drop-shadow-[0_0_15px_rgba(234,88,12,0.45)]"
+            />
+          </Link>
+        </div>
+
+        {/* PHẦN 2: NAVIGATION MENU CĂN CHÍNH GIỮA (DỊCH SANG PHẢI 1 TÍ ĐỂ CÂN BẰNG THỊ GIÁC) */}
+        <nav className="hidden md:flex flex-1 items-center justify-center pl-6 lg:pl-10 space-x-2 lg:space-x-3">
+          {navLinks.map((link) => {
+            const isSelected =
+              activeNav === link.name ||
+              (link.path === '/' && location.pathname === '/' && activeNav === 'TRANG CHỦ');
+
+            return (
+              <a
+                key={link.name}
+                href={link.path}
+                onClick={() => setActiveNav(link.name)}
+                className={`px-4 py-2 text-xs font-semibold tracking-wider transition-all duration-200 uppercase rounded-md transform hover:-translate-y-0.5 ${
+                  isSelected
+                    ? 'bg-cta-orange text-white shadow-md shadow-orange-950/40 font-bold'
+                    : 'text-zinc-300 hover:text-orange-400 bg-transparent hover:bg-zinc-900/60'
+                }`}
+              >
+                {link.name}
+              </a>
+            );
+          })}
+        </nav>
+
+        {/* PHẦN 3: ICON USER VÀ ICON 3 VẠCH BÊN PHẢI (HOVER CAM & NẢY LÊN) */}
+        <div className="w-40 sm:w-48 hidden md:flex items-center justify-end gap-3.5 flex-shrink-0">
+          {/* MỤC LOGIN: CHỈ ICON USER */}
+          <Link
+            to="/auth/login"
+            title="Đăng nhập tài khoản"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-zinc-300 hover:text-white bg-zinc-900 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg hover:shadow-orange-500/30 active:scale-95 cursor-pointer"
+          >
+            <User className="w-5 h-5" />
+          </Link>
+
+          {/* MỤC SETTING: CHỈ ICON 3 VẠCH */}
+          <button
+            type="button"
+            title="Cài đặt & Tùy chọn"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="w-10 h-10 rounded-full flex items-center justify-center text-zinc-300 hover:text-white bg-zinc-900 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg hover:shadow-orange-500/30 active:scale-95 cursor-pointer"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* MOBILE MENU TOGGLE (MÀN HÌNH NHỎ) */}
+        <div className="md:hidden flex items-center gap-2">
+          <Link
+            to="/auth/login"
+            className="p-2 text-zinc-400 hover:text-white hover:bg-cta-orange bg-zinc-900 border border-zinc-800 rounded-full transition-all duration-200"
+            title="Đăng nhập"
+          >
+            <User className="w-5 h-5" />
+          </Link>
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 text-zinc-400 hover:text-white hover:bg-cta-orange bg-zinc-900 border border-zinc-800 rounded-full transition-all duration-200 hover:-translate-y-0.5"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+      </div>
+
+      {/* MOBILE MENU DROPDOWN */}
+      {mobileMenuOpen && (
+        <div className="border-b border-dark-border bg-dark-surface px-4 py-5 space-y-3 animate-fadeIn">
+          <nav className="flex flex-col space-y-2 max-w-md mx-auto">
+            {navLinks.map((link) => {
+              const isSelected = activeNav === link.name;
+              return (
+                <a
+                  key={link.name}
+                  href={link.path}
+                  onClick={() => {
+                    setActiveNav(link.name);
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`px-3 py-2 text-sm font-semibold tracking-wider rounded-md uppercase transition-all duration-200 ${
+                    isSelected
+                      ? 'bg-cta-orange text-white'
+                      : 'text-zinc-300 hover:text-orange-400 bg-transparent'
+                  }`}
+                >
+                  {link.name}
+                </a>
+              );
+            })}
+          </nav>
+          <div className="pt-3 border-t border-zinc-800 flex items-center justify-center gap-4 max-w-md mx-auto">
+            <Link
+              to="/auth/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center justify-center gap-2 px-6 py-2 text-xs font-semibold tracking-wider text-zinc-200 hover:text-white hover:bg-cta-orange bg-zinc-900 border border-zinc-700 hover:border-cta-orange rounded-md uppercase transition-all duration-200"
+            >
+              <User className="w-4 h-4" />
+              <span>ĐĂNG NHẬP</span>
+            </Link>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
