@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, User } from 'lucide-react';
 import logoImg from '@/assets/images/logo.jpg';
+import { useAuth } from '@/features/auth';
 
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated, user } = useAuth();
 
   // State theo dõi mục đang được chọn
   const [activeNav, setActiveNav] = useState<string>('TRANG CHỦ');
@@ -62,11 +64,15 @@ export const Navbar: React.FC = () => {
 
         {/* PHẦN 3: ICON USER VÀ ICON 3 VẠCH BÊN PHẢI (HOVER CAM & NẢY LÊN) */}
         <div className="w-40 sm:w-48 hidden md:flex items-center justify-end gap-3.5 flex-shrink-0">
-          {/* MỤC LOGIN: CHỈ ICON USER */}
+          {/* MỤC USER / LOGIN */}
           <Link
-            to="/auth/login"
-            title="Đăng nhập tài khoản"
-            className="w-10 h-10 rounded-full flex items-center justify-center text-zinc-300 hover:text-white bg-zinc-900 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg hover:shadow-orange-500/30 active:scale-95 cursor-pointer"
+            to={isAuthenticated ? '/profile' : '/auth/login'}
+            title={isAuthenticated ? `Tài khoản: ${user?.name || ''}` : 'Đăng nhập tài khoản'}
+            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg hover:shadow-orange-500/30 active:scale-95 cursor-pointer ${
+              isAuthenticated
+                ? 'bg-zinc-800 text-orange-400 border border-cta-orange hover:bg-cta-orange hover:text-white'
+                : 'text-zinc-300 hover:text-white bg-zinc-900 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange'
+            }`}
           >
             <User className="w-5 h-5" />
           </Link>
@@ -85,9 +91,9 @@ export const Navbar: React.FC = () => {
         {/* MOBILE MENU TOGGLE (MÀN HÌNH NHỎ) */}
         <div className="md:hidden flex items-center gap-2">
           <Link
-            to="/auth/login"
+            to={isAuthenticated ? '/profile' : '/auth/login'}
             className="p-2 text-zinc-400 hover:text-white hover:bg-cta-orange bg-zinc-900 border border-zinc-800 rounded-full transition-all duration-200"
-            title="Đăng nhập"
+            title={isAuthenticated ? 'Tài khoản' : 'Đăng nhập'}
           >
             <User className="w-5 h-5" />
           </Link>
@@ -129,12 +135,12 @@ export const Navbar: React.FC = () => {
           </nav>
           <div className="pt-3 border-t border-zinc-800 flex items-center justify-center gap-4 max-w-md mx-auto">
             <Link
-              to="/auth/login"
+              to={isAuthenticated ? '/profile' : '/auth/login'}
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center justify-center gap-2 px-6 py-2 text-xs font-semibold tracking-wider text-zinc-200 hover:text-white hover:bg-cta-orange bg-zinc-900 border border-zinc-700 hover:border-cta-orange rounded-md uppercase transition-all duration-200"
             >
               <User className="w-4 h-4" />
-              <span>ĐĂNG NHẬP</span>
+              <span>{isAuthenticated ? 'TÀI KHOẢN' : 'ĐĂNG NHẬP'}</span>
             </Link>
           </div>
         </div>

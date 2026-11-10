@@ -112,3 +112,4 @@ export const BookingSuccessModal: React.FC<BookingSuccessModalProps> = ({
     </div>
   );
 };
+

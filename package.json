@@ -8,12 +8,14 @@
     "backend"
   ],
   "scripts": {
-    "dev:frontend": "npm run dev --workspace=frontend",
-    "dev:backend": "npm run dev --workspace=backend",
-    "build:frontend": "npm run build --workspace=frontend",
-    "build:backend": "npm run build --workspace=backend",
-    "lint:frontend": "npm run lint --workspace=frontend",
-    "lint:backend": "npm run lint --workspace=backend"
+    "dev": "pnpm --parallel --filter barbershop-frontend --filter barbershop-backend dev",
+    "dev:frontend": "pnpm --filter barbershop-frontend dev",
+    "dev:backend": "pnpm --filter barbershop-backend dev",
+    "build:frontend": "pnpm --filter barbershop-frontend build",
+    "build:backend": "pnpm --filter barbershop-backend build",
+    "lint:frontend": "pnpm --filter barbershop-frontend lint",
+    "lint:backend": "pnpm --filter barbershop-backend lint",
+    "seed:backend": "pnpm --filter barbershop-backend seed"
   },
   "keywords": [
     "barbershop",
