@@ -1,13 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BookingStepData, BookingResult } from '../types/bookingTypes';
+import { useAuth } from '@/features/auth';
 
 export function useBooking() {
+  const { user } = useAuth();
   const [step, setStep] = useState<number>(1);
-  const [bookingData, setBookingData] = useState<BookingStepData>({
+  const [bookingData, setBookingData] = useState<BookingStepData>(() => ({
     date: new Date().toISOString().split('T')[0],
-  });
+    customerName: user?.name || '',
+    customerPhone: user?.phone || '',
+  }));
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const [bookingResult, setBookingResult] = useState<BookingResult | null>(null);
+
+  // Tự động đồng bộ thông tin khách hàng từ tài khoản đăng nhập
+  useEffect(() => {
+    if (user) {
+      setBookingData((prev) => ({
+        ...prev,
+        customerName: prev.customerName || user.name || '',
+        customerPhone: prev.customerPhone || user.phone || '',
+      }));
+    }
+  }, [user]);
 
   const updateBookingData = (data: Partial<BookingStepData>) => {
     setBookingData((prev) => ({ ...prev, ...data }));
@@ -60,6 +75,8 @@ export function useBooking() {
     setStep(1);
     setBookingData({
       date: new Date().toISOString().split('T')[0],
+      customerName: user?.name || '',
+      customerPhone: user?.phone || '',
     });
     setIsCompleted(false);
     setBookingResult(null);

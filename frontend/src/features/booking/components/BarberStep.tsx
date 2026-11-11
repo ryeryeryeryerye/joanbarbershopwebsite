@@ -17,7 +17,7 @@ interface BarberOption {
 const BARBER_OPTIONS: BarberOption[] = [
   {
     id: 'any',
-    name: 'Thợ Bất Kỳ (Nhanh Nhất)',
+    name: 'Thợ Bất Kỳ',
     title: 'Tiệm tự sắp xếp thợ phục vụ ngay',
     experienceYears: 5,
     rating: 5.0,
@@ -109,11 +109,10 @@ export const BarberStep: React.FC<BarberStepProps> = ({ selectedBarberId, onSele
                   barberImage: barber.imageUrl,
                 })
               }
-              className={`group relative rounded-xl p-4 border transition-all duration-200 cursor-pointer flex flex-col justify-between transform hover:-translate-y-1 ${
-                isSelected
+              className={`group relative rounded-xl p-4 border transition-all duration-200 cursor-pointer flex flex-col justify-between transform hover:-translate-y-1 ${isSelected
                   ? 'bg-zinc-900 border-cta-orange shadow-lg shadow-orange-950/30 ring-1 ring-orange-500'
                   : 'bg-dark-card border-zinc-800 hover:border-zinc-600 hover:bg-zinc-900/90'
-              }`}
+                }`}
             >
               {isSelected && (
                 <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-cta-orange text-white flex items-center justify-center shadow-md">
@@ -139,7 +138,7 @@ export const BarberStep: React.FC<BarberStepProps> = ({ selectedBarberId, onSele
                     {barber.name}
                   </h4>
                   <p className="text-xs text-zinc-400 mt-0.5 truncate">{barber.title}</p>
-                  
+
                   <div className="flex items-center gap-3 mt-1.5 text-[11px] text-zinc-400">
                     <span className="flex items-center gap-1 text-orange-400">
                       <Star className="w-3.5 h-3.5 fill-orange-400" />
@@ -156,11 +155,10 @@ export const BarberStep: React.FC<BarberStepProps> = ({ selectedBarberId, onSele
                   Sở trường: <span className="text-zinc-200 font-medium">{barber.specialty}</span>
                 </span>
                 <span
-                  className={`text-xs font-semibold px-2.5 py-1 rounded transition-colors ${
-                    isSelected
+                  className={`text-xs font-semibold px-2.5 py-1 rounded transition-colors ${isSelected
                       ? 'bg-cta-orange text-white'
                       : 'bg-zinc-800 text-zinc-300 group-hover:bg-zinc-700'
-                  }`}
+                    }`}
                 >
                   {isSelected ? 'ĐÃ CHỌN' : 'CHỌN THỢ'}
                 </span>

@@ -135,6 +135,7 @@ export const LoginPage: React.FC = () => {
           Chưa có tài khoản?{' '}
           <Link
             to="/auth/register"
+            state={{ from: location.state?.from || { pathname: from } }}
             className="text-white hover:text-cta-orange font-semibold inline-flex items-center gap-1 transition-colors"
           >
             Đăng ký ngay <ArrowRight className="w-3.5 h-3.5" />

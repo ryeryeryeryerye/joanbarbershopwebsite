@@ -32,7 +32,7 @@ export const BookingSuccessModal: React.FC<BookingSuccessModalProps> = ({
             ĐẶT LỊCH THÀNH CÔNG!
           </h3>
           <p className="text-xs text-zinc-400">
-            Hệ thống đã ghi nhận lịch hẹn của bạn tại JOAN BARBER SHOP.
+            Hệ thống đã ghi nhận lịch hẹn của bạn.
           </p>
         </div>
 

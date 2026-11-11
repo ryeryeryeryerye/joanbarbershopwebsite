@@ -27,7 +27,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'booking',
-        element: <BookingCard />,
+        element: (
+          <ProtectedRoute>
+            <BookingCard />
+          </ProtectedRoute>
+        ),
       },
       {
         path: 'appointments',

@@ -7,6 +7,7 @@ interface ServiceItem {
   id: string;
   name: string;
   category: string;
+  categoryName?: string;
   price: number;
   durationMinutes: number;
   description: string;
@@ -17,59 +18,65 @@ interface ServiceItem {
 const AVAILABLE_SERVICES: ServiceItem[] = [
   {
     id: 'srv-1',
-    name: 'Combo Cắt Tóc Đế Vương 10 Bước',
+    name: 'Combo Cắt Tóc 10 Bước',
     category: 'combo',
+    categoryName: 'Combo 10 bước',
     price: 180000,
     durationMinutes: 45,
-    description: 'Tư vấn dáng tóc, gội thư giãn, cắt tạo kiểu, cạo viền khăn nóng, vuốt sáp Pomade tạo form.',
+    description: 'Combo cắt tóc siêu cấp với dịch vụ vô cùng tận tâm từ các barber có tay nghề cao.',
     imageUrl: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=600&q=80',
     popular: true,
   },
   {
     id: 'srv-2',
-    name: 'Cắt Tóc & Tạo Kiểu Pompadour Classic',
+    name: 'Cắt Tóc cơ bản',
     category: 'haircut',
+    categoryName: 'Cắt tóc cơ bản',
     price: 120000,
     durationMinutes: 35,
-    description: 'Kỹ thuật Fade sắc sảo, định hình phom tóc cổ điển quý ông sang trọng.',
+    description: 'Dịch vụ cắt tóc cơ bản nhưng tận tâm trong cả quy trình.',
     imageUrl: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=600&q=80',
     popular: true,
   },
   {
     id: 'srv-3',
-    name: 'Uốn Phồng Textured Quiff / Side Part',
+    name: 'Uốn tạo kiểu & Xử lý tóc',
     category: 'perm',
+    categoryName: 'Uốn tạo kiểu',
     price: 350000,
     durationMinutes: 60,
-    description: 'Uốn phồng tự nhiên công nghệ Hàn Quốc, bồng bềnh và giữ form bền đẹp.',
-    imageUrl: 'https://images.unsplash.com/photo-1517832606589-7629c3395909?auto=format&fit=crop&w=600&q=80',
+    description: 'Uốn tạo kiểu và xử lý tóc với tay nghề cao.',
+    imageUrl: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=600&q=80',
   },
   {
     id: 'srv-4',
-    name: 'Nhuộm Màu Thời Thượng Gentleman',
+    name: 'Nhuộm Màu Thời Thượng',
     category: 'color',
+    categoryName: 'Nhuộm màu',
     price: 290000,
     durationMinutes: 50,
-    description: 'Dòng thuốc nhuộm cao cấp không xót rát, tone màu nâu lạnh, xám khói nam tính.',
+    description: 'Sử dụng các dòng thuốc nhuộm cao cấp không xót rát',
     imageUrl: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=600&q=80',
   },
   {
     id: 'srv-5',
-    name: 'Cạo Mặt & Đắp Khăn Nóng Thảo Dược',
-    category: 'spa',
+    name: 'Cạo Mặt & Lột Mụn',
+    category: 'shave',
+    categoryName: 'Cạo mặt & Lột mụn',
     price: 90000,
     durationMinutes: 25,
-    description: 'Cạo râu truyền thống với bọt mềm, đắp khăn nóng thảo dược xua tan mệt mỏi.',
+    description: 'Cạo râu, lông mặt truyền thống với bọt mềm, đắp khăn nóng, lột mụn',
     imageUrl: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80',
   },
   {
     id: 'srv-6',
-    name: 'Tẩy Tế Bào Chết & Gội Dưỡng Sinh',
+    name: 'Chăm sóc tóc & Gội đầu Dưỡng Sinh',
     category: 'spa',
+    categoryName: 'Gội dưỡng sinh',
     price: 100000,
     durationMinutes: 30,
-    description: 'Làm sạch sâu bã nhờn chân tóc, bấm huyệt lưu thông tuần hoàn máu vùng đầu.',
-    imageUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
+    description: 'Thư giãn với quy trình chăm sóc tóc chuyên nghiệp.',
+    imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=600&q=80',
   },
 ];
 
@@ -83,11 +90,12 @@ export const ServiceStep: React.FC<ServiceStepProps> = ({ selectedServiceId, onS
 
   const categories = [
     { id: 'all', label: 'Tất cả dịch vụ' },
-    { id: 'combo', label: 'Combo Đế Vương' },
-    { id: 'haircut', label: 'Cắt & Tạo kiểu' },
-    { id: 'perm', label: 'Uốn tóc' },
+    { id: 'combo', label: 'Combo 10 bước' },
+    { id: 'haircut', label: 'Cắt tóc cơ bản' },
+    { id: 'perm', label: 'Uốn tạo kiểu' },
     { id: 'color', label: 'Nhuộm màu' },
-    { id: 'spa', label: 'Gội & Chăm sóc' },
+    { id: 'shave', label: 'Cạo mặt & Lột mụn' },
+    { id: 'spa', label: 'Gội dưỡng sinh' },
   ];
 
   const filteredServices =
@@ -114,11 +122,10 @@ export const ServiceStep: React.FC<ServiceStepProps> = ({ selectedServiceId, onS
             key={cat.id}
             type="button"
             onClick={() => setActiveCategory(cat.id)}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all duration-200 transform hover:-translate-y-0.5 ${
-              activeCategory === cat.id
-                ? 'bg-cta-orange text-white shadow-md shadow-orange-950/40'
-                : 'bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
-            }`}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all duration-200 transform hover:-translate-y-0.5 ${activeCategory === cat.id
+              ? 'bg-cta-orange text-white shadow-md shadow-orange-950/40'
+              : 'bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
+              }`}
           >
             {cat.label}
           </button>
@@ -141,11 +148,10 @@ export const ServiceStep: React.FC<ServiceStepProps> = ({ selectedServiceId, onS
                   serviceImage: service.imageUrl,
                 })
               }
-              className={`group relative rounded-xl p-4 border transition-all duration-200 cursor-pointer flex flex-col justify-between transform hover:-translate-y-1 ${
-                isSelected
-                  ? 'bg-zinc-900 border-cta-orange shadow-lg shadow-orange-950/30 ring-1 ring-orange-500'
-                  : 'bg-dark-card border-zinc-800 hover:border-zinc-600 hover:bg-zinc-900/90'
-              }`}
+              className={`group relative rounded-xl p-4 border transition-all duration-200 cursor-pointer flex flex-col justify-between transform hover:-translate-y-1 ${isSelected
+                ? 'bg-zinc-900 border-cta-orange shadow-lg shadow-orange-950/30 ring-1 ring-orange-500'
+                : 'bg-dark-card border-zinc-800 hover:border-zinc-600 hover:bg-zinc-900/90'
+                }`}
             >
               {/* Checkmark icon khi được chọn */}
               {isSelected && (
@@ -185,11 +191,10 @@ export const ServiceStep: React.FC<ServiceStepProps> = ({ selectedServiceId, onS
                   {formatCurrency(service.price)}
                 </span>
                 <span
-                  className={`text-xs font-semibold px-3 py-1 rounded transition-colors ${
-                    isSelected
-                      ? 'bg-cta-orange text-white'
-                      : 'bg-zinc-800 text-zinc-300 group-hover:bg-zinc-700'
-                  }`}
+                  className={`text-xs font-semibold px-3 py-1 rounded transition-colors ${isSelected
+                    ? 'bg-cta-orange text-white'
+                    : 'bg-zinc-800 text-zinc-300 group-hover:bg-zinc-700'
+                    }`}
                 >
                   {isSelected ? 'ĐÃ CHỌN' : 'CHỌN GÓI NÀY'}
                 </span>

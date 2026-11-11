@@ -25,10 +25,15 @@ export const CustomerInfoStep: React.FC<CustomerInfoStepProps> = ({ data, onChan
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* CỘT TRÁI: FORM ĐIỀN THÔNG TIN */}
         <div className="lg:col-span-7 space-y-5 bg-dark-card border border-dark-border rounded-2xl p-6">
-          <h3 className="text-sm font-bold text-white uppercase tracking-wider border-b border-zinc-800 pb-3 flex items-center gap-2">
-            <User className="w-4 h-4 text-orange-400" />
-            <span>THÔNG TIN KHÁCH HÀNG</span>
-          </h3>
+          <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+            <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <User className="w-4 h-4 text-orange-400" />
+              <span>THÔNG TIN KHÁCH HÀNG</span>
+            </h3>
+            <span className="text-[11px] text-zinc-400 bg-zinc-900 border border-zinc-800 px-2.5 py-0.5 rounded-full">
+              Tự động điền từ tài khoản
+            </span>
+          </div>
 
           {/* HỌ VÀ TÊN */}
           <div className="space-y-1.5">

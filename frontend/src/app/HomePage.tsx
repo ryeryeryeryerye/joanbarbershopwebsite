@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, ArrowRight, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { ServiceCard, ServiceItem } from '@/features/services/components/ServiceCard';
@@ -36,67 +37,79 @@ const HERO_SLIDES = [
   },
 ];
 
-// 2. DỮ LIỆU 6 DỊCH VỤ NỔI BẬT (DỊCH VỤ HOT)
+// 2. DỮ LIỆU 6 DỊCH VỤ NỔI BẬT (ĐỒNG BỘ NỘI DUNG TỪ SERVICE STEP)
 const FEATURED_SERVICES: ServiceItem[] = [
   {
     id: 'srv-1',
-    name: 'Combo Cắt Tóc Đế Vương 10 Bước',
+    name: 'Combo Cắt Tóc 10 Bước',
+    category: 'combo',
+    categoryName: 'Combo 10 bước',
     price: 180000,
     durationMinutes: 45,
     description:
-      'Quy trình trọn gói: Tư vấn, gội đầu thư giãn, cắt tạo kiểu chuyên nghiệp, cạo viền sắc nét và vuốt sáp Pomade cao cấp.',
+      'Combo cắt tóc siêu cấp với dịch vụ vô cùng tận tâm từ các barber có tay nghề cao.',
     imageUrl:
       'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'srv-2',
-    name: 'Cắt Tóc & Tạo Kiểu Pompadour Classic',
+    name: 'Cắt Tóc cơ bản',
+    category: 'haircut',
+    categoryName: 'Cắt tóc cơ bản',
     price: 120000,
     durationMinutes: 35,
     description:
-      'Đường kéo chuẩn mực kết hợp kỹ thuật Skin Fade sắc sảo, định hình phom tóc sang trọng dành cho doanh nhân và quý ông.',
+      'Dịch vụ cắt tóc cơ bản nhưng tận tâm trong cả quy trình.',
     imageUrl:
       'https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'srv-3',
-    name: 'Uốn Phồng Textured Quiff / Side Part',
+    name: 'Uốn tạo kiểu & Xử lý tóc',
+    category: 'perm',
+    categoryName: 'Uốn tạo kiểu',
     price: 350000,
     durationMinutes: 60,
     description:
-      'Kỹ thuật uốn lạnh cao cấp tạo độ phồng bồng bềnh tự nhiên, giúp tóc vào nếp dễ dàng chỉ với 2 phút sấy tại nhà.',
+      'Uốn tạo kiểu và xử lý tóc với tay nghề cao.',
     imageUrl:
-      'https://images.unsplash.com/photo-1517832606589-7629c3395909?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'srv-4',
-    name: 'Nhuộm Màu Thời Thượng Gentleman',
+    name: 'Nhuộm Màu Thời Thượng',
+    category: 'color',
+    categoryName: 'Nhuộm màu',
     price: 290000,
     durationMinutes: 50,
     description:
-      'Sử dụng dòng thuốc nhuộm Ý organic an toàn cho da đầu, dải màu nam tính từ nâu lạnh, xám khói đến đen ánh xanh.',
+      'Sử dụng các dòng thuốc nhuộm cao cấp không xót rát',
     imageUrl:
       'https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'srv-5',
-    name: 'Cạo Mặt & Đắp Khăn Nóng Thảo Dược',
+    name: 'Cạo Mặt & Lột Mụn',
+    category: 'shave',
+    categoryName: 'Cạo mặt & Lột mụn',
     price: 90000,
     durationMinutes: 25,
     description:
-      'Cạo râu truyền thống với bọt mềm êm ái, chườm khăn nóng tinh dầu bạc hà sảng khoái và dưỡng ẩm phục hồi da mặt.',
+      'Cạo râu, lông mặt truyền thống với bọt mềm, đắp khăn nóng, lột mụn',
     imageUrl:
       'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'srv-6',
-    name: 'Tẩy Tế Bào Chết & Gội Dưỡng Sinh',
+    name: 'Chăm sóc tóc & Gội đầu Dưỡng Sinh',
+    category: 'spa',
+    categoryName: 'Gội dưỡng sinh',
     price: 100000,
     durationMinutes: 30,
     description:
-      'Thanh lọc sạch sâu bã nhờn nang tóc, kết hợp massage bấm huyệt cổ vai gáy giải tỏa triệt để căng thẳng sau ngày làm việc.',
+      'Thư giãn với quy trình chăm sóc tóc chuyên nghiệp.',
     imageUrl:
-      'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80',
   },
 ];
 
@@ -230,7 +243,7 @@ export const HomePage: React.FC = () => {
               </a>
 
               {/* Nút 2: ĐẶT LỊCH CẮT TÓC (MÀU CAM ĐIỂM NHẤN + HIỆU ỨNG NẢY) */}
-              <a href="/booking">
+              <Link to="/booking">
                 <Button
                   variant="cta"
                   size="lg"
@@ -239,7 +252,7 @@ export const HomePage: React.FC = () => {
                   <span>ĐẶT LỊCH CẮT TÓC</span>
                   <ArrowRight className="w-4 h-4" />
                 </Button>
-              </a>
+              </Link>
             </div>
 
             {/* Điểm nhấn tin cậy tối giản */}
@@ -334,7 +347,7 @@ export const HomePage: React.FC = () => {
       {/* ========================================================================= */}
       <section id="services" className="space-y-8 scroll-mt-28">
         {/* Tiêu đề khung theo sát wireframe */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800 pb-5">
+        <div className="border-b border-zinc-800 pb-5">
           <div className="space-y-2">
             {/* Box nhãn DỊCH VỤ HOT */}
             <div className="inline-block px-4 py-1.5 rounded-md border border-zinc-700 bg-zinc-900/90 text-white font-black text-sm tracking-[0.2em] uppercase">
@@ -344,14 +357,6 @@ export const HomePage: React.FC = () => {
               Tuyển tập 6 dịch vụ chăm sóc tóc và da mặt được khách hàng yêu thích và lựa chọn nhiều nhất.
             </p>
           </div>
-
-          <a
-            href="/booking"
-            className="text-xs font-semibold text-zinc-400 hover:text-orange-400 flex items-center gap-1.5 uppercase tracking-wider transition-colors hover:-translate-y-0.5"
-          >
-            <span>Tất cả bảng giá</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </a>
         </div>
 
         {/* LƯỚI 6 THẺ DỊCH VỤ (3 CỘT X 2 HÀNG TRÊN DESKTOP) */}
@@ -369,7 +374,7 @@ export const HomePage: React.FC = () => {
       {/* ========================================================================= */}
       <section id="barbers" className="space-y-8 scroll-mt-28">
         {/* Tiêu đề khung theo sát wireframe */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800 pb-5">
+        <div className="border-b border-zinc-800 pb-5">
           <div className="space-y-2">
             {/* Box nhãn THỢ TÓC */}
             <div className="inline-block px-4 py-1.5 rounded-md border border-zinc-700 bg-zinc-900/90 text-white font-black text-sm tracking-[0.2em] uppercase">
@@ -378,26 +383,6 @@ export const HomePage: React.FC = () => {
             <p className="text-xs sm:text-sm text-zinc-400">
               Đội ngũ nghệ nhân kéo điêu luyện với nhiều năm kinh nghiệm, luôn tận tâm tạo nên phong cách hoàn hảo.
             </p>
-          </div>
-
-          {/* Nút điều hướng Carousel trên tiêu đề (dành cho màn hình nhỏ) */}
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={handlePrevBarber}
-              className="p-2.5 rounded-lg border border-zinc-700 bg-zinc-900 hover:bg-cta-orange hover:border-cta-orange text-zinc-300 hover:text-white transition-all duration-200 transform hover:-translate-y-1 hover:shadow-md hover:shadow-orange-500/25 active:scale-95"
-              aria-label="Previous barber"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              type="button"
-              onClick={handleNextBarber}
-              className="p-2.5 rounded-lg border border-zinc-700 bg-zinc-900 hover:bg-cta-orange hover:border-cta-orange text-zinc-300 hover:text-white transition-all duration-200 transform hover:-translate-y-1 hover:shadow-md hover:shadow-orange-500/25 active:scale-95"
-              aria-label="Next barber"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
           </div>
         </div>
 
@@ -479,7 +464,7 @@ export const HomePage: React.FC = () => {
 
         {/* NÚT ĐẶT LỊCH NGAY (HOVER MÀU CAM & NẢY LÊN) */}
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-          <a href="/booking" className="w-full sm:w-auto">
+          <Link to="/booking" className="w-full sm:w-auto">
             <Button
               variant="cta"
               size="lg"
@@ -488,7 +473,7 @@ export const HomePage: React.FC = () => {
               <span>ĐẶT LỊCH NGAY BÂY GIỜ</span>
               <ArrowRight className="w-4 h-4" />
             </Button>
-          </a>
+          </Link>
           <a href="#services" className="w-full sm:w-auto">
             <Button
               variant="outline"

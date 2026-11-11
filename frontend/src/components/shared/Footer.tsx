@@ -5,7 +5,7 @@ import logoImg from '@/assets/images/logo.jpg';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-dark-surface border-t border-dark-border mt-20 text-zinc-400">
+    <footer id="about" className="bg-dark-surface border-t border-dark-border mt-20 text-zinc-400 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* CỘT 1: LOGO CHÍNH HÃNG DUY NHẤT (KHÔNG KÈM TEXT) */}
@@ -33,19 +33,19 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2.5 text-xs">
               <li>
-                <a href="/" className="hover:text-orange-400 transition-colors">Trang chủ</a>
+                <Link to="/" className="hover:text-orange-400 transition-colors">Trang chủ</Link>
               </li>
               <li>
-                <a href="#services" className="hover:text-orange-400 transition-colors">Danh sách dịch vụ</a>
+                <a href="/#services" className="hover:text-orange-400 transition-colors">Danh sách dịch vụ</a>
               </li>
               <li>
-                <a href="#barbers" className="hover:text-orange-400 transition-colors">Đội ngũ thợ tóc</a>
+                <a href="/#barbers" className="hover:text-orange-400 transition-colors">Đội ngũ thợ tóc</a>
               </li>
               <li>
-                <a href="#about" className="hover:text-orange-400 transition-colors">Về Barbershop</a>
+                <a href="/#about" className="hover:text-orange-400 transition-colors">Về Barbershop</a>
               </li>
               <li>
-                <a href="#booking" className="hover:text-orange-400 transition-colors">Đặt lịch trực tuyến</a>
+                <Link to="/booking" className="hover:text-orange-400 transition-colors">Đặt lịch trực tuyến</Link>
               </li>
             </ul>
           </div>

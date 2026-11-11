@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { User as UserIcon, Phone, Lock, AlertCircle, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { useAuth } from '../hooks/useAuth';
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { register } = useAuth();
+
+  const from = (location.state as { from?: { pathname?: string } })?.from?.pathname || '/';
 
   const [formData, setFormData] = useState({
     name: '',
@@ -79,7 +82,7 @@ export const RegisterPage: React.FC = () => {
         password: formData.password,
         confirmPassword: formData.confirmPassword,
       });
-      navigate('/', { replace: true });
+      navigate(from, { replace: true });
     } catch (err: unknown) {
       const apiErr = err as { message?: string };
       setErrors((prev) => ({
@@ -243,6 +246,7 @@ export const RegisterPage: React.FC = () => {
           Đã có tài khoản?{' '}
           <Link
             to="/auth/login"
+            state={{ from: location.state?.from || { pathname: from } }}
             className="text-white hover:text-cta-orange font-semibold inline-flex items-center gap-1 transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" /> Đăng nhập ngay

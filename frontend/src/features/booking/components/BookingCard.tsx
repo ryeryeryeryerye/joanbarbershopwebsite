@@ -38,7 +38,7 @@ export const BookingCard: React.FC = () => {
           ĐẶT LỊCH CẮT TÓC <span className="text-orange-500">TRỰC TUYẾN</span>
         </h1>
         <p className="text-xs sm:text-sm text-zinc-400 max-w-xl mx-auto">
-          Chỉ với 4 bước đơn giản, bạn sẽ sở hữu ngay khung giờ vàng cùng stylist tay nghề cao tại JOAN BARBERSHOP.
+          Đặt lịch cắt ngay chỉ với 4 bước đơn giản.
         </p>
       </div>
 
@@ -56,22 +56,20 @@ export const BookingCard: React.FC = () => {
                 type="button"
                 onClick={() => goToStep(item.num)}
                 disabled={item.num > step}
-                className={`flex flex-col sm:flex-row items-center justify-center gap-2 py-3 px-2 sm:px-4 rounded-xl border text-center transition-all duration-200 ${
-                  isCurrent
-                    ? 'bg-zinc-900 border-cta-orange text-white shadow-lg shadow-orange-950/30 ring-1 ring-orange-500'
-                    : isPassed
-                      ? 'bg-zinc-900/60 border-zinc-700 text-orange-400 hover:border-zinc-500 cursor-pointer'
-                      : 'bg-dark-card/50 border-zinc-800 text-zinc-600 cursor-not-allowed'
-                }`}
+                className={`flex flex-col sm:flex-row items-center justify-center gap-2 py-3 px-2 sm:px-4 rounded-xl border text-center transition-all duration-200 ${isCurrent
+                  ? 'bg-zinc-900 border-cta-orange text-white shadow-lg shadow-orange-950/30 ring-1 ring-orange-500'
+                  : isPassed
+                    ? 'bg-zinc-900/60 border-zinc-700 text-orange-400 hover:border-zinc-500 cursor-pointer'
+                    : 'bg-dark-card/50 border-zinc-800 text-zinc-600 cursor-not-allowed'
+                  }`}
               >
                 <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-                    isCurrent
-                      ? 'bg-cta-orange text-white'
-                      : isPassed
-                        ? 'bg-orange-500/20 text-orange-400'
-                        : 'bg-zinc-800 text-zinc-500'
-                  }`}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${isCurrent
+                    ? 'bg-cta-orange text-white'
+                    : isPassed
+                      ? 'bg-orange-500/20 text-orange-400'
+                      : 'bg-zinc-800 text-zinc-500'
+                    }`}
                 >
                   {isPassed ? <CheckCircle2 className="w-4 h-4" /> : item.num}
                 </div>
