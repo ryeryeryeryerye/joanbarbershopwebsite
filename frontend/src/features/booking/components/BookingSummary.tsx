@@ -1,5 +1,5 @@
 import React from 'react';
-import { Scissors, User, Calendar, Clock, ArrowRight, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Scissors, User, Calendar, Clock, ArrowRight, ArrowLeft, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { BookingStepData } from '../types/bookingTypes';
 import { formatCurrency } from '@/utils';
@@ -11,6 +11,8 @@ interface BookingSummaryProps {
   onPrev: () => void;
   onConfirm: () => void;
   canProceed: boolean;
+  isSubmitting?: boolean;
+  submitError?: string | null;
 }
 
 export const BookingSummary: React.FC<BookingSummaryProps> = ({
@@ -20,6 +22,8 @@ export const BookingSummary: React.FC<BookingSummaryProps> = ({
   onPrev,
   onConfirm,
   canProceed,
+  isSubmitting = false,
+  submitError = null,
 }) => {
   return (
     <div className="bg-dark-card border border-dark-border rounded-2xl p-6 lg:p-7 sticky top-28 space-y-6 shadow-xl">
@@ -123,16 +127,33 @@ export const BookingSummary: React.FC<BookingSummaryProps> = ({
             <ArrowRight className="w-4 h-4" />
           </Button>
         ) : (
-          <Button
-            variant="cta"
-            size="lg"
-            className="w-full gap-2 shadow-xl shadow-orange-950/60"
-            disabled={!canProceed}
-            onClick={onConfirm}
-          >
-            <CheckCircle2 className="w-4 h-4" />
-            <span>XÁC NHẬN ĐẶT LỊCH NGAY</span>
-          </Button>
+          <>
+            {submitError && (
+              <div className="flex items-center gap-2 text-xs text-red-400 bg-red-950/30 border border-red-900/50 rounded-lg px-3 py-2">
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <span>{submitError}</span>
+              </div>
+            )}
+            <Button
+              variant="cta"
+              size="lg"
+              className="w-full gap-2 shadow-xl shadow-orange-950/60"
+              disabled={!canProceed || isSubmitting}
+              onClick={onConfirm}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span>ĐANG XỬ LÝ...</span>
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>XÁC NHẬN ĐẶT LỊCH NGAY</span>
+                </>
+              )}
+            </Button>
+          </>
         )}
 
         {step > 1 && (

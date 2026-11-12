@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, ArrowRight, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui';
-import { ServiceCard, ServiceItem } from '@/features/services/components/ServiceCard';
+import { ServiceCard, CANONICAL_SERVICES } from '@/features/services';
 import { BarberCard, BarberItem } from '@/features/barbers/components/BarberCard';
 import logoImg from '@/assets/images/logo.jpg';
 
@@ -37,81 +37,8 @@ const HERO_SLIDES = [
   },
 ];
 
-// 2. DỮ LIỆU 6 DỊCH VỤ NỔI BẬT (ĐỒNG BỘ NỘI DUNG TỪ SERVICE STEP)
-const FEATURED_SERVICES: ServiceItem[] = [
-  {
-    id: 'srv-1',
-    name: 'Combo Cắt Tóc 10 Bước',
-    category: 'combo',
-    categoryName: 'Combo 10 bước',
-    price: 180000,
-    durationMinutes: 45,
-    description:
-      'Combo cắt tóc siêu cấp với dịch vụ vô cùng tận tâm từ các barber có tay nghề cao.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'srv-2',
-    name: 'Cắt Tóc cơ bản',
-    category: 'haircut',
-    categoryName: 'Cắt tóc cơ bản',
-    price: 120000,
-    durationMinutes: 35,
-    description:
-      'Dịch vụ cắt tóc cơ bản nhưng tận tâm trong cả quy trình.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'srv-3',
-    name: 'Uốn tạo kiểu & Xử lý tóc',
-    category: 'perm',
-    categoryName: 'Uốn tạo kiểu',
-    price: 350000,
-    durationMinutes: 60,
-    description:
-      'Uốn tạo kiểu và xử lý tóc với tay nghề cao.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'srv-4',
-    name: 'Nhuộm Màu Thời Thượng',
-    category: 'color',
-    categoryName: 'Nhuộm màu',
-    price: 290000,
-    durationMinutes: 50,
-    description:
-      'Sử dụng các dòng thuốc nhuộm cao cấp không xót rát',
-    imageUrl:
-      'https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'srv-5',
-    name: 'Cạo Mặt & Lột Mụn',
-    category: 'shave',
-    categoryName: 'Cạo mặt & Lột mụn',
-    price: 90000,
-    durationMinutes: 25,
-    description:
-      'Cạo râu, lông mặt truyền thống với bọt mềm, đắp khăn nóng, lột mụn',
-    imageUrl:
-      'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'srv-6',
-    name: 'Chăm sóc tóc & Gội đầu Dưỡng Sinh',
-    category: 'spa',
-    categoryName: 'Gội dưỡng sinh',
-    price: 100000,
-    durationMinutes: 30,
-    description:
-      'Thư giãn với quy trình chăm sóc tóc chuyên nghiệp.',
-    imageUrl:
-      'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=80',
-  },
-];
+// 2. DỮ LIỆU 6 DỊCH VỤ NỔI BẬT (ĐỒNG BỘ CHUẨN VỚI SERVICE STEP)
+const FEATURED_SERVICES = CANONICAL_SERVICES;
 
 // 3. DỮ LIỆU ĐỘI NGŨ THỢ TÓC (CAROUSEL)
 const BARBERS_LIST: BarberItem[] = [

@@ -1,84 +1,9 @@
-import React, { useState } from 'react';
-import { Clock, Check, Scissors } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Clock, Check, Scissors, X } from 'lucide-react';
 import { formatCurrency } from '@/utils';
 import { BookingStepData } from '../types/bookingTypes';
-
-interface ServiceItem {
-  id: string;
-  name: string;
-  category: string;
-  categoryName?: string;
-  price: number;
-  durationMinutes: number;
-  description: string;
-  imageUrl: string;
-  popular?: boolean;
-}
-
-const AVAILABLE_SERVICES: ServiceItem[] = [
-  {
-    id: 'srv-1',
-    name: 'Combo Cắt Tóc 10 Bước',
-    category: 'combo',
-    categoryName: 'Combo 10 bước',
-    price: 180000,
-    durationMinutes: 45,
-    description: 'Combo cắt tóc siêu cấp với dịch vụ vô cùng tận tâm từ các barber có tay nghề cao.',
-    imageUrl: 'https://images.unsplash.com/photo-1599351431202-1e0f0137899a?auto=format&fit=crop&w=600&q=80',
-    popular: true,
-  },
-  {
-    id: 'srv-2',
-    name: 'Cắt Tóc cơ bản',
-    category: 'haircut',
-    categoryName: 'Cắt tóc cơ bản',
-    price: 120000,
-    durationMinutes: 35,
-    description: 'Dịch vụ cắt tóc cơ bản nhưng tận tâm trong cả quy trình.',
-    imageUrl: 'https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=600&q=80',
-    popular: true,
-  },
-  {
-    id: 'srv-3',
-    name: 'Uốn tạo kiểu & Xử lý tóc',
-    category: 'perm',
-    categoryName: 'Uốn tạo kiểu',
-    price: 350000,
-    durationMinutes: 60,
-    description: 'Uốn tạo kiểu và xử lý tóc với tay nghề cao.',
-    imageUrl: 'https://images.unsplash.com/photo-1622286342621-4bd786c2447c?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'srv-4',
-    name: 'Nhuộm Màu Thời Thượng',
-    category: 'color',
-    categoryName: 'Nhuộm màu',
-    price: 290000,
-    durationMinutes: 50,
-    description: 'Sử dụng các dòng thuốc nhuộm cao cấp không xót rát',
-    imageUrl: 'https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'srv-5',
-    name: 'Cạo Mặt & Lột Mụn',
-    category: 'shave',
-    categoryName: 'Cạo mặt & Lột mụn',
-    price: 90000,
-    durationMinutes: 25,
-    description: 'Cạo râu, lông mặt truyền thống với bọt mềm, đắp khăn nóng, lột mụn',
-    imageUrl: 'https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=600&q=80',
-  },
-  {
-    id: 'srv-6',
-    name: 'Chăm sóc tóc & Gội đầu Dưỡng Sinh',
-    category: 'spa',
-    categoryName: 'Gội dưỡng sinh',
-    price: 100000,
-    durationMinutes: 30,
-    description: 'Thư giãn với quy trình chăm sóc tóc chuyên nghiệp.',
-    imageUrl: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=600&q=80',
-  },
-];
+import { axiosClient } from '@/lib';
+import { CANONICAL_SERVICES, ServiceData } from '@/features/services';
 
 interface ServiceStepProps {
   selectedServiceId?: string;
@@ -86,7 +11,41 @@ interface ServiceStepProps {
 }
 
 export const ServiceStep: React.FC<ServiceStepProps> = ({ selectedServiceId, onSelect }) => {
+  const [services, setServices] = useState<ServiceData[]>(CANONICAL_SERVICES);
   const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [detailModalService, setDetailModalService] = useState<ServiceData | null>(null);
+
+  // Lấy dữ liệu dịch vụ từ API backend (MongoDB), đồng bộ với DB
+  useEffect(() => {
+    let mounted = true;
+    axiosClient
+      .get('/services')
+      .then((res: unknown) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const data = (res as any)?.data || res;
+        if (mounted && Array.isArray(data) && data.length > 0) {
+          const mapped: ServiceData[] = CANONICAL_SERVICES.map((canon) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const fromDb = data.find((d: any) => d.name?.toLowerCase() === canon.name.toLowerCase());
+            return {
+              ...canon,
+              id: fromDb?._id || canon.id,
+              price: fromDb?.price ?? canon.price,
+              durationMinutes: fromDb?.durationMinutes ?? canon.durationMinutes,
+              description: fromDb?.description || canon.description,
+            };
+          });
+          setServices(mapped);
+        }
+      })
+      .catch(() => {
+        // Giữ CANONICAL_SERVICES
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const categories = [
     { id: 'all', label: 'Tất cả dịch vụ' },
@@ -100,8 +59,8 @@ export const ServiceStep: React.FC<ServiceStepProps> = ({ selectedServiceId, onS
 
   const filteredServices =
     activeCategory === 'all'
-      ? AVAILABLE_SERVICES
-      : AVAILABLE_SERVICES.filter((s) => s.category === activeCategory);
+      ? services
+      : services.filter((s) => s.category === activeCategory);
 
   return (
     <div className="space-y-6">
@@ -111,7 +70,7 @@ export const ServiceStep: React.FC<ServiceStepProps> = ({ selectedServiceId, onS
           <span>Bước 1: Chọn Dịch Vụ Cắt Tóc & Chăm Sóc</span>
         </h2>
         <p className="text-xs sm:text-sm text-zinc-400 mt-1">
-          Lựa chọn gói dịch vụ bạn mong muốn trải nghiệm tại Gentlemen Barbershop.
+          Tuyển tập 6 dịch vụ chăm sóc tóc và da mặt được khách hàng yêu thích và lựa chọn nhiều nhất.
         </p>
       </div>
 
@@ -122,88 +81,217 @@ export const ServiceStep: React.FC<ServiceStepProps> = ({ selectedServiceId, onS
             key={cat.id}
             type="button"
             onClick={() => setActiveCategory(cat.id)}
-            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all duration-200 transform hover:-translate-y-0.5 ${activeCategory === cat.id
-              ? 'bg-cta-orange text-white shadow-md shadow-orange-950/40'
-              : 'bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
-              }`}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wider transition-all duration-200 transform hover:-translate-y-0.5 ${
+              activeCategory === cat.id
+                ? 'bg-cta-orange text-white shadow-md shadow-orange-950/40'
+                : 'bg-zinc-900 text-zinc-400 hover:text-white hover:bg-zinc-800 border border-zinc-800'
+            }`}
           >
             {cat.label}
           </button>
         ))}
       </div>
 
-      {/* DANH SÁCH THẺ DỊCH VỤ DẠNG LƯỚI */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* DANH SÁCH THẺ DỊCH VỤ - ĐỒNG BỘ 100% VỚI CARD Ở TRANG CHỦ */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {filteredServices.map((service) => {
-          const isSelected = selectedServiceId === service.id;
+          const isSelected = selectedServiceId === service.id || selectedServiceId === service.name;
           return (
             <div
               key={service.id}
-              onClick={() =>
-                onSelect({
-                  serviceId: service.id,
-                  serviceName: service.name,
-                  servicePrice: service.price,
-                  serviceDuration: service.durationMinutes,
-                  serviceImage: service.imageUrl,
-                })
-              }
-              className={`group relative rounded-xl p-4 border transition-all duration-200 cursor-pointer flex flex-col justify-between transform hover:-translate-y-1 ${isSelected
-                ? 'bg-zinc-900 border-cta-orange shadow-lg shadow-orange-950/30 ring-1 ring-orange-500'
-                : 'bg-dark-card border-zinc-800 hover:border-zinc-600 hover:bg-zinc-900/90'
-                }`}
+              className={`group bg-dark-card border rounded-xl overflow-hidden transition-all duration-300 flex flex-col hover:-translate-y-1 shadow-sm hover:shadow-xl hover:shadow-black/60 relative ${
+                isSelected
+                  ? 'border-cta-orange ring-2 ring-orange-500 shadow-orange-950/40 bg-zinc-900/90'
+                  : 'border-dark-border hover:border-zinc-500'
+              }`}
             >
-              {/* Checkmark icon khi được chọn */}
-              {isSelected && (
-                <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-cta-orange text-white flex items-center justify-center shadow-md">
-                  <Check className="w-4 h-4 stroke-[3]" />
-                </div>
-              )}
-
-              {service.popular && !isSelected && (
-                <span className="absolute top-3 right-3 text-[10px] font-bold text-orange-400 bg-orange-950/60 border border-orange-800/80 px-2 py-0.5 rounded uppercase tracking-wider">
-                  HOT
-                </span>
-              )}
-
-              <div className="flex gap-4">
+              {/* ẢNH DỊCH VỤ DẠNG BANNER PHÍA TRÊN */}
+              <div className="relative aspect-[16/10] overflow-hidden bg-zinc-900">
                 <img
                   src={service.imageUrl}
                   alt={service.name}
-                  className="w-20 h-20 rounded-lg object-cover flex-shrink-0 bg-zinc-800 border border-zinc-700/80"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
                 />
-                <div className="flex-1 min-w-0 pr-6">
-                  <h4 className="text-sm font-bold text-white group-hover:text-orange-400 transition-colors line-clamp-1">
-                    {service.name}
-                  </h4>
-                  <p className="text-xs text-zinc-400 mt-1 line-clamp-2 leading-relaxed">
-                    {service.description}
-                  </p>
-                  <div className="flex items-center gap-1.5 mt-2 text-[11px] text-zinc-500">
-                    <Clock className="w-3 h-3 text-zinc-400" />
-                    <span>{service.durationMinutes} phút</span>
+                <div className="absolute inset-0 bg-gradient-to-t from-dark-card via-transparent to-transparent opacity-80" />
+
+                {/* Nhãn phân loại dịch vụ góc trên bên trái */}
+                {service.categoryName && (
+                  <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded bg-black/80 backdrop-blur-md border border-zinc-700/80 text-[10px] font-bold text-orange-400 uppercase tracking-wider">
+                    {service.categoryName}
                   </div>
+                )}
+
+                {/* Check icon khi được chọn */}
+                {isSelected && (
+                  <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-cta-orange text-white flex items-center justify-center shadow-lg ring-2 ring-white/30">
+                    <Check className="w-4 h-4 stroke-[3]" />
+                  </div>
+                )}
+
+                {/* Thời lượng góc dưới bên trái */}
+                <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded bg-black/75 backdrop-blur-md border border-zinc-700/60 text-[11px] font-medium text-zinc-300">
+                  <Clock className="w-3 h-3 text-zinc-400" />
+                  <span>{service.durationMinutes} phút</span>
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-zinc-800/80 flex items-center justify-between">
-                <span className="text-sm font-extrabold text-white">
-                  {formatCurrency(service.price)}
-                </span>
-                <span
-                  className={`text-xs font-semibold px-3 py-1 rounded transition-colors ${isSelected
-                    ? 'bg-cta-orange text-white'
-                    : 'bg-zinc-800 text-zinc-300 group-hover:bg-zinc-700'
-                    }`}
-                >
-                  {isSelected ? 'ĐÃ CHỌN' : 'CHỌN GÓI NÀY'}
-                </span>
+              {/* THÔNG TIN DỊCH VỤ */}
+              <div className="p-5 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-base font-bold text-white group-hover:text-orange-400 transition-colors tracking-tight line-clamp-1">
+                    {service.name}
+                  </h3>
+                  <p className="mt-1.5 text-xs text-zinc-400 leading-relaxed line-clamp-2">
+                    {service.description}
+                  </p>
+                </div>
+
+                {/* GIÁ TIỀN & THAO TÁC: HAI NÚT CHI TIẾT & CHỌN GÓI */}
+                <div className="mt-4 pt-3 border-t border-zinc-800/80 flex items-center justify-between gap-2">
+                  <div>
+                    <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">
+                      Giá dịch vụ
+                    </span>
+                    <span className="text-base font-extrabold text-white tracking-tight">
+                      {formatCurrency(service.price)}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {/* Nút xem chi tiết các bước */}
+                    <button
+                      type="button"
+                      onClick={() => setDetailModalService(service)}
+                      className="text-xs font-semibold text-zinc-300 hover:text-white px-3 py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 transition-all duration-200 uppercase tracking-wider cursor-pointer"
+                    >
+                      Chi tiết
+                    </button>
+
+                    {/* Nút chọn gói */}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        onSelect({
+                          serviceId: service.id,
+                          serviceName: service.name,
+                          servicePrice: service.price,
+                          serviceDuration: service.durationMinutes,
+                          serviceImage: service.imageUrl,
+                        })
+                      }
+                      className={`text-xs font-bold px-3.5 py-1.5 rounded transition-all duration-200 uppercase tracking-wider transform hover:-translate-y-0.5 cursor-pointer ${
+                        isSelected
+                          ? 'bg-cta-orange text-white shadow-lg shadow-orange-950/50'
+                          : 'bg-zinc-800 hover:bg-cta-orange text-zinc-200 hover:text-white border border-zinc-700 hover:border-cta-orange'
+                      }`}
+                    >
+                      {isSelected ? 'ĐÃ CHỌN' : 'ĐẶT LỊCH'}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           );
         })}
       </div>
+
+      {/* MODAL CHI TIẾT DỊCH VỤ */}
+      {detailModalService && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
+          <div className="relative w-full max-w-lg bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="relative aspect-[16/9] w-full overflow-hidden bg-zinc-950 flex-shrink-0">
+              <img
+                src={detailModalService.imageUrl}
+                alt={detailModalService.name}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-black/40" />
+              <button
+                type="button"
+                onClick={() => setDetailModalService(null)}
+                className="absolute top-4 right-4 p-2 rounded-full bg-black/60 text-white hover:bg-cta-orange transition-colors duration-200"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <div className="absolute bottom-4 left-6 right-6">
+                <span className="px-2.5 py-1 rounded bg-cta-orange text-white font-bold text-xs uppercase tracking-wider">
+                  {detailModalService.categoryName || 'Dịch vụ'}
+                </span>
+                <h3 className="text-xl font-black text-white mt-2 leading-tight">
+                  {detailModalService.name}
+                </h3>
+              </div>
+            </div>
+
+            <div className="p-6 overflow-y-auto space-y-5 flex-1">
+              <div className="flex items-center justify-between pb-4 border-b border-zinc-800">
+                <div className="flex items-center gap-2 text-zinc-300 text-sm">
+                  <Clock className="w-4 h-4 text-orange-400" />
+                  <span>Thời gian: <strong>{detailModalService.durationMinutes} phút</strong></span>
+                </div>
+                <div className="text-right">
+                  <span className="text-xl font-black text-white">
+                    {formatCurrency(detailModalService.price)}
+                  </span>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-2">
+                  Mô tả dịch vụ
+                </h4>
+                <p className="text-sm text-zinc-300 leading-relaxed">
+                  {detailModalService.description}
+                </p>
+              </div>
+
+              <div>
+                <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <Scissors className="w-4 h-4 text-cta-orange" />
+                  <span>Quy trình thực hiện ({detailModalService.steps?.length || 0} bước)</span>
+                </h4>
+                <div className="space-y-2.5">
+                  {detailModalService.steps?.map((stepText, idx) => (
+                    <div key={idx} className="flex items-start gap-3 p-2.5 rounded-lg bg-zinc-950/60 border border-zinc-800/80">
+                      <div className="w-5 h-5 rounded-full bg-orange-950/60 border border-orange-800 text-orange-400 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
+                        {idx + 1}
+                      </div>
+                      <p className="text-xs text-zinc-300 leading-relaxed">{stepText}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 bg-zinc-950 border-t border-zinc-800 flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => setDetailModalService(null)}
+                className="px-4 py-2 text-xs font-bold uppercase rounded-lg border border-zinc-700 text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onSelect({
+                    serviceId: detailModalService.id,
+                    serviceName: detailModalService.name,
+                    servicePrice: detailModalService.price,
+                    serviceDuration: detailModalService.durationMinutes,
+                    serviceImage: detailModalService.imageUrl,
+                  });
+                  setDetailModalService(null);
+                }}
+                className="px-6 py-2 text-xs font-bold uppercase rounded-lg bg-cta-orange hover:bg-orange-500 text-white transition-all shadow-lg shadow-orange-950/40"
+              >
+                Chọn dịch vụ này
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
-

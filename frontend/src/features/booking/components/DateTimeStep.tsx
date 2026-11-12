@@ -1,6 +1,7 @@
 import React from 'react';
-import { Calendar, Clock, Sun, Sunset, Moon } from 'lucide-react';
+import { Calendar, Clock } from 'lucide-react';
 import { BookingStepData } from '../types/bookingTypes';
+import { SHOP_TIME_PERIODS } from '../constants/timeSlots';
 
 interface DateTimeStepProps {
   selectedDate?: string;
@@ -34,43 +35,6 @@ const getNext7Days = () => {
   return days;
 };
 
-// Khung giờ theo 3 buổi
-const TIME_PERIODS = [
-  {
-    name: 'Buổi Sáng',
-    icon: Sun,
-    slots: [
-      { time: '08:30', isBusy: false },
-      { time: '09:15', isBusy: false },
-      { time: '10:00', isBusy: true },
-      { time: '10:45', isBusy: false },
-      { time: '11:30', isBusy: false },
-    ],
-  },
-  {
-    name: 'Buổi Chiều',
-    icon: Sunset,
-    slots: [
-      { time: '13:30', isBusy: false },
-      { time: '14:15', isBusy: false },
-      { time: '15:00', isBusy: true },
-      { time: '15:45', isBusy: false },
-      { time: '16:30', isBusy: false },
-      { time: '17:15', isBusy: false },
-    ],
-  },
-  {
-    name: 'Buổi Tối',
-    icon: Moon,
-    slots: [
-      { time: '18:00', isBusy: false },
-      { time: '18:45', isBusy: true },
-      { time: '19:30', isBusy: false },
-      { time: '20:15', isBusy: false },
-    ],
-  },
-];
-
 export const DateTimeStep: React.FC<DateTimeStepProps> = ({
   selectedDate,
   selectedTimeSlot,
@@ -87,7 +51,7 @@ export const DateTimeStep: React.FC<DateTimeStepProps> = ({
           <span>Bước 3: Chọn Ngày & Khung Giờ Cắt Tóc</span>
         </h2>
         <p className="text-xs sm:text-sm text-zinc-400 mt-1">
-          Chọn khung giờ phù hợp để được tiếp đón chu đáo và không mất thời gian chờ đợi.
+          Shop mở cửa từ 08:30 đến 21:00 hàng ngày. Mỗi khung giờ cách nhau 30 phút.
         </p>
       </div>
 
@@ -135,26 +99,22 @@ export const DateTimeStep: React.FC<DateTimeStepProps> = ({
       <div className="space-y-5 pt-2">
         <div className="flex items-center justify-between">
           <label className="text-xs font-bold text-zinc-300 uppercase tracking-wider block">
-            2. CHỌN GIỜ CÒN TRỐNG
+            2. CHỌN KHUNG GIỜ (MỖI 30 PHÚT)
           </label>
           <div className="flex items-center gap-4 text-xs text-zinc-400">
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
-              <span>Còn trống</span>
+              <span>Có thể chọn</span>
             </span>
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
               <span>Đang chọn</span>
             </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-zinc-900 border border-zinc-800" />
-              <span className="line-through text-zinc-600">Đã kín</span>
-            </span>
           </div>
         </div>
 
         <div className="space-y-6">
-          {TIME_PERIODS.map((period) => {
+          {SHOP_TIME_PERIODS.map((period) => {
             const Icon = period.icon;
             return (
               <div
@@ -166,26 +126,15 @@ export const DateTimeStep: React.FC<DateTimeStepProps> = ({
                   <span>{period.name}</span>
                 </div>
 
-                <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 gap-2.5">
+                <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
                   {period.slots.map((slot) => {
                     const isSelected = selectedTimeSlot === slot.time;
-                    if (slot.isBusy) {
-                      return (
-                        <div
-                          key={slot.time}
-                          className="py-2.5 px-3 rounded-lg bg-zinc-950/60 border border-zinc-900 text-zinc-600 text-xs font-medium text-center line-through cursor-not-allowed select-none"
-                        >
-                          {slot.time}
-                        </div>
-                      );
-                    }
-
                     return (
                       <button
                         key={slot.time}
                         type="button"
                         onClick={() => onSelect({ timeSlot: slot.time })}
-                        className={`py-2.5 px-3 rounded-lg border text-xs font-bold transition-all duration-200 transform hover:-translate-y-1 ${
+                        className={`py-2 px-2.5 rounded-lg border text-xs font-bold transition-all duration-200 transform hover:-translate-y-0.5 text-center ${
                           isSelected
                             ? 'bg-cta-orange border-cta-orange text-white shadow-md shadow-orange-950/40 ring-1 ring-orange-500'
                             : 'bg-zinc-900 border-zinc-800 text-zinc-300 hover:border-cta-orange hover:text-white hover:bg-zinc-800'
@@ -205,4 +154,3 @@ export const DateTimeStep: React.FC<DateTimeStepProps> = ({
     </div>
   );
 };
-

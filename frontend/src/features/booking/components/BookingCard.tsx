@@ -21,6 +21,8 @@ export const BookingCard: React.FC = () => {
     isCompleted,
     bookingResult,
     resetBooking,
+    isSubmitting,
+    submitError,
   } = useBooking();
 
   const stepperItems = [
@@ -129,6 +131,8 @@ export const BookingCard: React.FC = () => {
             onPrev={prevStep}
             onConfirm={confirmBooking}
             canProceed={canProceed()}
+            isSubmitting={isSubmitting}
+            submitError={submitError}
           />
         </div>
       </div>

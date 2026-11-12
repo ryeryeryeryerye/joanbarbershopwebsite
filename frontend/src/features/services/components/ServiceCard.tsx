@@ -140,7 +140,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
 
               {/* NÚT ĐẶT LỊCH: CÙNG MÀU VỚI NÚT CHI TIẾT */}
               <Link
-                to="/booking"
+                to={`/booking?serviceId=${service.id}`}
                 className="text-xs font-semibold text-zinc-200 hover:text-white px-3 py-1.5 rounded bg-zinc-800 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange transition-all duration-200 uppercase tracking-wider transform hover:-translate-y-1 hover:shadow-md hover:shadow-orange-500/30 active:scale-95 inline-block"
               >
                 Đặt lịch

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Star, Check, Zap, UserCheck } from 'lucide-react';
 import { BookingStepData } from '../types/bookingTypes';
+import { axiosClient } from '@/lib';
 
 interface BarberOption {
   id: string;
@@ -14,7 +15,7 @@ interface BarberOption {
   isRandom?: boolean;
 }
 
-const BARBER_OPTIONS: BarberOption[] = [
+const DEFAULT_BARBERS: BarberOption[] = [
   {
     id: 'any',
     name: 'Thợ Bất Kỳ',
@@ -83,6 +84,48 @@ interface BarberStepProps {
 }
 
 export const BarberStep: React.FC<BarberStepProps> = ({ selectedBarberId, onSelect }) => {
+  const [barbers, setBarbers] = useState<BarberOption[]>(DEFAULT_BARBERS);
+
+  // Lấy dữ liệu thợ cắt tóc từ API backend (MongoDB)
+  useEffect(() => {
+    let mounted = true;
+    axiosClient
+      .get('/barbers')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((res: any) => {
+        const data = res?.data || res;
+        if (mounted && Array.isArray(data) && data.length > 0) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const apiBarbers: BarberOption[] = data.map((b: any, idx: number) => {
+            const fallback = DEFAULT_BARBERS.find(
+              (d) => d.name.toLowerCase() === b.name?.toLowerCase()
+            ) || DEFAULT_BARBERS[(idx + 1) % DEFAULT_BARBERS.length];
+
+            return {
+              id: b._id || fallback.id,
+              name: b.name || fallback.name,
+              title: b.title || fallback.title,
+              experienceYears: b.experienceYears ?? fallback.experienceYears,
+              rating: b.rating ?? fallback.rating,
+              reviewCount: b.reviewCount ?? fallback.reviewCount,
+              specialty: b.specialty || fallback.specialty,
+              imageUrl: b.imageUrl || fallback.imageUrl,
+            };
+          });
+
+          // Giữ option "Thợ Bất Kỳ" ở đầu
+          setBarbers([DEFAULT_BARBERS[0], ...apiBarbers]);
+        }
+      })
+      .catch(() => {
+        // Giữ danh sách mặc định nếu API chưa sẵn sàng
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   return (
     <div className="space-y-6">
       <div>
@@ -96,7 +139,7 @@ export const BarberStep: React.FC<BarberStepProps> = ({ selectedBarberId, onSele
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {BARBER_OPTIONS.map((barber) => {
+        {barbers.map((barber) => {
           const isSelected = selectedBarberId === barber.id;
           return (
             <div
@@ -170,4 +213,3 @@ export const BarberStep: React.FC<BarberStepProps> = ({ selectedBarberId, onSele
     </div>
   );
 };
-
