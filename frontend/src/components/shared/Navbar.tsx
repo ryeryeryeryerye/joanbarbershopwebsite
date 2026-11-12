@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, User } from 'lucide-react';
+import { Menu, X, User, CalendarCheck } from 'lucide-react';
 import logoImg from '@/assets/images/logo.jpg';
 import { useAuth } from '@/features/auth';
 
@@ -24,6 +24,14 @@ export const Navbar: React.FC = () => {
     if (!name || !name.trim()) return 'U';
     // Lấy chữ cái đầu tiên của tên account (ví dụ: "admin joan barbershop" -> chữ "A")
     return name.trim().charAt(0).toUpperCase();
+  };
+
+  const handleCartClick = () => {
+    if (!isAuthenticated) {
+      navigate('/auth/login', { state: { from: { pathname: '/appointments' } } });
+    } else {
+      navigate('/appointments');
+    }
   };
 
   const handleNavClick = (
@@ -103,7 +111,17 @@ export const Navbar: React.FC = () => {
         </nav>
 
         {/* PHẦN 3: ICON USER VÀ ICON 3 VẠCH BÊN PHẢI (HOVER CAM & NẢY LÊN) */}
-        <div className="w-40 sm:w-48 hidden md:flex items-center justify-end gap-3.5 flex-shrink-0">
+        <div className="w-40 sm:w-48 hidden md:flex items-center justify-end gap-2.5 flex-shrink-0">
+          {/* GIỎ HÀNG / LỊCH ĐẶT */}
+          <button
+            type="button"
+            title="Lịch đặt của bạn"
+            onClick={handleCartClick}
+            className="w-10 h-10 rounded-full flex items-center justify-center text-zinc-300 hover:text-white bg-zinc-900 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg hover:shadow-orange-500/30 active:scale-95 cursor-pointer"
+          >
+            <CalendarCheck className="w-5 h-5" />
+          </button>
+
           {/* MỤC USER / LOGIN: PFP CHỮ CÁI ĐẦU CỦA TÊN KHI ĐÃ ĐĂNG NHẬP */}
           <Link
             to={isAuthenticated ? '/profile' : '/auth/login'}
@@ -134,6 +152,15 @@ export const Navbar: React.FC = () => {
 
         {/* MOBILE MENU TOGGLE (MÀN HÌNH NHỎ) */}
         <div className="md:hidden flex items-center gap-2">
+          {/* GIỎ HÀNG MOBILE */}
+          <button
+            type="button"
+            title="Lịch đặt của bạn"
+            onClick={handleCartClick}
+            className="w-9 h-9 rounded-full flex items-center justify-center text-zinc-400 hover:text-white hover:bg-cta-orange bg-zinc-900 border border-zinc-800 transition-all duration-200"
+          >
+            <CalendarCheck className="w-4 h-4" />
+          </button>
           <Link
             to={isAuthenticated ? '/profile' : '/auth/login'}
             className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 ${
