@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { CheckCircle2, Calendar, User, Scissors, MapPin, ArrowRight, Home } from 'lucide-react';
+import { CheckCircle2, Calendar, User, Scissors, MapPin, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { BookingResult } from '../types/bookingTypes';
 import { formatCurrency } from '@/utils';
@@ -16,28 +16,31 @@ interface BookingSuccessModalProps {
 export const BookingSuccessModal: React.FC<BookingSuccessModalProps> = ({
   isOpen,
   result,
-  onReset,
+  onClose,
 }) => {
   if (!isOpen || !result) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-      <div className="relative w-full max-w-lg bg-dark-card border border-zinc-700 rounded-3xl overflow-hidden shadow-2xl p-6 sm:p-8 space-y-6">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn cursor-pointer"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-lg bg-dark-card border border-zinc-700 rounded overflow-hidden shadow-2xl p-6 sm:p-8 space-y-6 cursor-default"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* ICON CHECK HOÀN TẤT */}
         <div className="text-center space-y-2">
-          <div className="w-16 h-16 mx-auto rounded-full bg-orange-950/60 border border-orange-500/50 flex items-center justify-center text-orange-400 shadow-lg shadow-orange-950/50 animate-bounce">
+          <div className="w-16 h-16 mx-auto rounded bg-orange-950/60 border border-orange-500/50 flex items-center justify-center text-orange-400 shadow-lg shadow-orange-950/50 animate-bounce">
             <CheckCircle2 className="w-9 h-9 stroke-[2.5]" />
           </div>
           <h3 className="text-2xl font-black text-white uppercase tracking-tight">
             ĐẶT LỊCH THÀNH CÔNG!
           </h3>
-          <p className="text-xs text-zinc-400">
-            Hệ thống đã ghi nhận lịch hẹn của bạn.
-          </p>
         </div>
 
         {/* THẺ TICKET THÔNG TIN LỊCH HẸN */}
-        <div className="p-5 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-4">
+        <div className="p-5 rounded bg-zinc-900 border border-zinc-800 space-y-4">
           <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
             <div className="flex items-center gap-2">
               <img src={logoImg} alt="Joan Barbershop" className="h-8 w-auto object-contain" />
@@ -86,23 +89,19 @@ export const BookingSuccessModal: React.FC<BookingSuccessModalProps> = ({
           </div>
         </div>
 
-        <p className="text-[11px] text-zinc-500 text-center italic">
-          * Vui lòng có mặt đúng giờ trước 5 phút để được phục vụ chu đáo nhất.
-        </p>
-
         {/* NÚT ĐIỀU HƯỚNG */}
         <div className="flex flex-col sm:flex-row gap-3">
-          <Button
-            variant="outline"
-            className="flex-1 gap-2 border-zinc-700 bg-zinc-900 text-zinc-300 hover:text-white"
-            onClick={onReset}
-          >
-            <span>Đặt thêm lịch khác</span>
-          </Button>
+          <Link to="/appointments" className="flex-1">
+            <Button
+              variant="outline"
+              className="w-full gap-2 border-zinc-700 bg-zinc-900 text-zinc-300 hover:text-white"
+            >
+              <span>Xem lịch hẹn</span>
+            </Button>
+          </Link>
 
           <Link to="/" className="flex-1">
             <Button variant="cta" className="w-full gap-2 shadow-lg shadow-orange-950/40">
-              <Home className="w-4 h-4" />
               <span>Về Trang Chủ</span>
               <ArrowRight className="w-4 h-4" />
             </Button>

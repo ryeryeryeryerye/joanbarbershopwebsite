@@ -168,10 +168,6 @@ export const BookingSummary: React.FC<BookingSummaryProps> = ({
           </Button>
         )}
       </div>
-
-      <div className="text-[11px] text-zinc-500 text-center leading-relaxed">
-        * Giữ chỗ trong 15 phút. Bạn có thể đổi lịch hoặc hủy miễn phí trước giờ hẹn.
-      </div>
     </div>
   );
 };

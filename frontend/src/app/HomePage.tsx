@@ -201,7 +201,7 @@ export const HomePage: React.FC = () => {
 
           {/* CỘT PHẢI: SLIDE ẢNH QUẢNG BÁ (Đã bỏ tag text SLIDE ẢNH QUẢNG BÁ # theo yêu cầu) */}
           <div className="lg:col-span-6">
-            <div className="relative rounded-2xl overflow-hidden border border-zinc-700 bg-zinc-900 shadow-2xl shadow-black aspect-[4/3] sm:aspect-[16/11] group">
+            <div className="relative rounded overflow-hidden border border-zinc-700 bg-zinc-900 shadow-2xl shadow-black aspect-[4/3] sm:aspect-[16/11] group">
               {/* Ảnh slide hiện tại */}
               <img
                 src={HERO_SLIDES[currentHeroSlide].imageUrl}
@@ -223,7 +223,7 @@ export const HomePage: React.FC = () => {
                 </p>
               </div>
 
-              {/* Điều hướng slide (Prev / Next: HOVER MÀU CAM & NẢY LÊN) */}
+              {/* Điều hướng slide (Prev / Next: NÚT VUÔNG BO GÓC NHẸ) */}
               <div className="absolute bottom-4 right-4 flex items-center gap-2">
                 <button
                   type="button"
@@ -232,7 +232,7 @@ export const HomePage: React.FC = () => {
                       prev === 0 ? HERO_SLIDES.length - 1 : prev - 1
                     )
                   }
-                  className="w-8 h-8 rounded-full bg-black/75 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange text-white flex items-center justify-center transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-md hover:shadow-orange-500/30 active:scale-95 cursor-pointer"
+                  className="w-8 h-8 rounded bg-black/75 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange text-white flex items-center justify-center transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-md hover:shadow-orange-500/30 active:scale-95 cursor-pointer"
                   aria-label="Previous slide"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -242,21 +242,21 @@ export const HomePage: React.FC = () => {
                   onClick={() =>
                     setCurrentHeroSlide((prev) => (prev + 1) % HERO_SLIDES.length)
                   }
-                  className="w-8 h-8 rounded-full bg-black/75 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange text-white flex items-center justify-center transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-md hover:shadow-orange-500/30 active:scale-95 cursor-pointer"
+                  className="w-8 h-8 rounded bg-black/75 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange text-white flex items-center justify-center transition-all duration-200 transform hover:-translate-y-0.5 hover:shadow-md hover:shadow-orange-500/30 active:scale-95 cursor-pointer"
                   aria-label="Next slide"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
 
-              {/* Indicator dots */}
+              {/* Indicator bars hình chữ nhật */}
               <div className="absolute top-4 right-4 flex items-center gap-1.5">
                 {HERO_SLIDES.map((_, index) => (
                   <button
                     key={index}
                     type="button"
                     onClick={() => setCurrentHeroSlide(index)}
-                    className={`h-1.5 rounded-full transition-all ${
+                    className={`h-1 rounded-sm transition-all ${
                       index === currentHeroSlide ? 'w-6 bg-orange-500' : 'w-2 bg-zinc-600'
                     }`}
                     aria-label={`Go to slide ${index + 1}`}
@@ -269,20 +269,15 @@ export const HomePage: React.FC = () => {
       </section>
 
       {/* ========================================================================= */}
-      {/* 2. KHU VỰC DỊCH VỤ NỔI BẬT (DỊCH VỤ HOT - 6 THẺ DẠNG LƯỚI)                */}
-      {/* Header dạng badge/box như wireframe: [ DỊCH VỤ HOT ]                      */}
+      {/* 2. KHU VỰC DỊCH VỤ (6 THẺ DẠNG LƯỚI)                                      */}
+      {/* Header dạng badge/box: [ DỊCH VỤ ]                                         */}
       {/* ========================================================================= */}
       <section id="services" className="space-y-8 scroll-mt-28">
         {/* Tiêu đề khung theo sát wireframe */}
         <div className="border-b border-zinc-800 pb-5">
-          <div className="space-y-2">
-            {/* Box nhãn DỊCH VỤ HOT */}
-            <div className="inline-block px-4 py-1.5 rounded-md border border-zinc-700 bg-zinc-900/90 text-white font-black text-sm tracking-[0.2em] uppercase">
-              DỊCH VỤ HOT
-            </div>
-            <p className="text-xs sm:text-sm text-zinc-400">
-              Tuyển tập 6 dịch vụ chăm sóc tóc và da mặt được khách hàng yêu thích và lựa chọn nhiều nhất.
-            </p>
+          {/* Box nhãn DỊCH VỤ */}
+          <div className="inline-block px-4 py-1.5 rounded-md border border-zinc-700 bg-zinc-900/90 text-white font-black text-sm tracking-[0.2em] uppercase">
+            DỊCH VỤ
           </div>
         </div>
 
@@ -302,28 +297,23 @@ export const HomePage: React.FC = () => {
       <section id="barbers" className="space-y-8 scroll-mt-28">
         {/* Tiêu đề khung theo sát wireframe */}
         <div className="border-b border-zinc-800 pb-5">
-          <div className="space-y-2">
-            {/* Box nhãn THỢ TÓC */}
-            <div className="inline-block px-4 py-1.5 rounded-md border border-zinc-700 bg-zinc-900/90 text-white font-black text-sm tracking-[0.2em] uppercase">
-              THỢ TÓC
-            </div>
-            <p className="text-xs sm:text-sm text-zinc-400">
-              Đội ngũ nghệ nhân kéo điêu luyện với nhiều năm kinh nghiệm, luôn tận tâm tạo nên phong cách hoàn hảo.
-            </p>
+          {/* Box nhãn THỢ TÓC */}
+          <div className="inline-block px-4 py-1.5 rounded-md border border-zinc-700 bg-zinc-900/90 text-white font-black text-sm tracking-[0.2em] uppercase">
+            THỢ TÓC
           </div>
         </div>
 
         {/* KHU VỰC CAROUSEL VỚI 3 THẺ ĐỨNG THEO SÁT WIREFRAME */}
         <div className="relative">
-          {/* Nút mũi tên TRÁI [←] lớn bên ngoài theo wireframe (HOVER MÀU CAM & NẢY LÊN) */}
+          {/* Nút mũi tên TRÁI [←] lớn bên ngoài theo wireframe (NÚT VUÔNG BO GÓC NHẸ) */}
           <div className="hidden lg:flex absolute -left-5 top-1/2 -translate-y-1/2 z-10">
             <button
               type="button"
               onClick={handlePrevBarber}
-              className="w-12 h-12 rounded-full border border-zinc-700 bg-zinc-950/95 hover:bg-cta-orange hover:border-cta-orange text-white flex items-center justify-center shadow-xl transition-all duration-200 transform hover:scale-110 hover:-translate-y-1 hover:shadow-orange-500/30 active:scale-95 cursor-pointer"
+              className="w-11 h-11 rounded border border-zinc-700 bg-zinc-950/95 hover:bg-cta-orange hover:border-cta-orange text-white flex items-center justify-center shadow-xl transition-all duration-200 transform hover:scale-105 hover:-translate-y-0.5 hover:shadow-orange-500/30 active:scale-95 cursor-pointer"
               aria-label="Previous barber slide"
             >
-              <ChevronLeft className="w-6 h-6" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
           </div>
 
@@ -339,27 +329,27 @@ export const HomePage: React.FC = () => {
             ))}
           </div>
 
-          {/* Nút mũi tên PHẢI [→] lớn bên ngoài theo wireframe (HOVER MÀU CAM & NẢY LÊN) */}
+          {/* Nút mũi tên PHẢI [→] lớn bên ngoài theo wireframe (NÚT VUÔNG BO GÓC NHẸ) */}
           <div className="hidden lg:flex absolute -right-5 top-1/2 -translate-y-1/2 z-10">
             <button
               type="button"
               onClick={handleNextBarber}
-              className="w-12 h-12 rounded-full border border-zinc-700 bg-zinc-950/95 hover:bg-cta-orange hover:border-cta-orange text-white flex items-center justify-center shadow-xl transition-all duration-200 transform hover:scale-110 hover:-translate-y-1 hover:shadow-orange-500/30 active:scale-95 cursor-pointer"
+              className="w-11 h-11 rounded border border-zinc-700 bg-zinc-950/95 hover:bg-cta-orange hover:border-cta-orange text-white flex items-center justify-center shadow-xl transition-all duration-200 transform hover:scale-105 hover:-translate-y-0.5 hover:shadow-orange-500/30 active:scale-95 cursor-pointer"
               aria-label="Next barber slide"
             >
-              <ChevronRight className="w-6 h-6" />
+              <ChevronRight className="w-5 h-5" />
             </button>
           </div>
         </div>
 
-        {/* Carousel indicators dots */}
+        {/* Carousel indicators bars */}
         <div className="flex justify-center items-center gap-2 pt-2">
           {BARBERS_LIST.map((_, idx) => (
             <button
               key={idx}
               type="button"
               onClick={() => setBarberStartIndex(idx)}
-              className={`h-1.5 rounded-full transition-all ${
+              className={`h-1 rounded-sm transition-all ${
                 idx === barberStartIndex % BARBERS_LIST.length
                   ? 'w-8 bg-orange-500'
                   : 'w-2 bg-zinc-700 hover:bg-zinc-500'
@@ -375,10 +365,10 @@ export const HomePage: React.FC = () => {
       {/* ========================================================================= */}
       <section
         id="booking"
-        className="relative rounded-2xl overflow-hidden border border-zinc-700 bg-gradient-to-b from-zinc-900 to-black p-8 sm:p-14 text-center space-y-6 shadow-2xl"
+        className="relative rounded overflow-hidden border border-zinc-700 bg-gradient-to-b from-zinc-900 to-black p-8 sm:p-14 text-center space-y-6 shadow-2xl"
       >
         <div className="max-w-2xl mx-auto space-y-3">
-          <div className="w-20 h-20 mx-auto rounded-xl overflow-hidden border border-zinc-700 shadow-md mb-2 bg-black flex items-center justify-center p-1">
+          <div className="w-20 h-20 mx-auto rounded overflow-hidden border border-zinc-700 shadow-md mb-2 bg-black flex items-center justify-center p-1">
             <img src={logoImg} alt="JOAN BARBERSHOP" className="w-full h-full object-contain" />
           </div>
           <h2 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tight">

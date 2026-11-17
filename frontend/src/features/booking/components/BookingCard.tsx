@@ -66,7 +66,7 @@ export const BookingCard: React.FC = () => {
                   }`}
               >
                 <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${isCurrent
+                  className={`w-7 h-7 rounded flex items-center justify-center text-xs font-bold ${isCurrent
                     ? 'bg-cta-orange text-white'
                     : isPassed
                       ? 'bg-orange-500/20 text-orange-400'

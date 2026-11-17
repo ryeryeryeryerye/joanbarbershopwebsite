@@ -104,7 +104,7 @@ export const ProfilePage: React.FC = () => {
 
             {/* Role Badge */}
             <div
-              className={`px-3 py-1 rounded-full text-xs font-semibold border flex items-center gap-1.5 ${roleInfo.bg}`}
+              className={`px-3 py-1 rounded text-xs font-semibold border flex items-center gap-1.5 ${roleInfo.bg}`}
             >
               <Shield className="w-3.5 h-3.5" />
               <span>{roleInfo.label}</span>

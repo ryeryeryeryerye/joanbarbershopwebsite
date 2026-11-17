@@ -6,6 +6,16 @@ export default {
   ],
   theme: {
     extend: {
+      borderRadius: {
+        'none': '0px',
+        'sm': '1px',
+        DEFAULT: '2px',
+        'md': '2px',
+        'lg': '3px',
+        'xl': '3px',
+        '2xl': '4px',
+        '3xl': '4px',
+      },
       colors: {
         // Chủ đạo: Đen, xám, trắng
         dark: {

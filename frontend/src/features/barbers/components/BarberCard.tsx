@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Star, Award } from 'lucide-react';
 
 export interface BarberItem {
@@ -18,7 +19,7 @@ interface BarberCardProps {
 
 export const BarberCard: React.FC<BarberCardProps> = ({ barber }) => {
   return (
-    <div className="group bg-dark-card border border-dark-border hover:border-zinc-500 rounded-2xl overflow-hidden transition-all duration-300 flex flex-col hover:-translate-y-2 shadow-sm hover:shadow-2xl hover:shadow-black/70">
+    <div className="group bg-dark-card border border-dark-border hover:border-zinc-500 rounded overflow-hidden transition-all duration-300 flex flex-col hover:-translate-y-2 shadow-sm hover:shadow-2xl hover:shadow-black/70">
       {/* ẢNH CHÂN DUNG DẠNG ĐỨNG */}
       <div className="relative aspect-[3/4] overflow-hidden bg-zinc-900">
         <img
@@ -30,7 +31,7 @@ export const BarberCard: React.FC<BarberCardProps> = ({ barber }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-dark-card via-black/30 to-transparent opacity-90" />
         
         {/* Rating Badge */}
-        <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-zinc-700/60 text-xs font-semibold text-zinc-200">
+        <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded bg-black/75 backdrop-blur-md border border-zinc-700/60 text-xs font-semibold text-zinc-200">
           <Star className="w-3.5 h-3.5 text-orange-400 fill-orange-400" />
           <span>{barber.rating.toFixed(1)}</span>
           <span className="text-[10px] text-zinc-500">({barber.reviewCount})</span>
@@ -52,19 +53,16 @@ export const BarberCard: React.FC<BarberCardProps> = ({ barber }) => {
           <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mt-1">
             {barber.title}
           </p>
-          <div className="mt-3 inline-block px-3 py-1 bg-zinc-900 rounded-md border border-zinc-800 text-[11px] text-zinc-300">
-            Sở trường: <span className="font-semibold text-white">{barber.specialty}</span>
-          </div>
         </div>
 
         {/* NÚT THAO TÁC (HOVER MÀU CAM & NẢY LÊN) */}
         <div className="mt-5 pt-3 border-t border-zinc-800">
-          <a
-            href="#booking"
-            className="w-full inline-block py-2.5 px-4 rounded-md text-xs font-semibold text-zinc-200 hover:text-white bg-zinc-900 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange transition-all duration-200 uppercase tracking-wider transform hover:-translate-y-1 hover:shadow-md hover:shadow-orange-500/30 active:scale-95"
+          <Link
+            to="/booking"
+            className="w-full inline-block py-2.5 px-4 rounded text-xs font-semibold text-zinc-200 hover:text-white bg-zinc-900 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange transition-all duration-200 uppercase tracking-wider transform hover:-translate-y-1 hover:shadow-md hover:shadow-orange-500/30 active:scale-95 text-center"
           >
-            Xem lịch thợ
-          </a>
+            Đặt lịch cắt
+          </Link>
         </div>
       </div>
     </div>

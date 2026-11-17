@@ -50,9 +50,6 @@ export const DateTimeStep: React.FC<DateTimeStepProps> = ({
           <Calendar className="w-5 h-5 text-orange-400" />
           <span>Bước 3: Chọn Ngày & Khung Giờ Cắt Tóc</span>
         </h2>
-        <p className="text-xs sm:text-sm text-zinc-400 mt-1">
-          Shop mở cửa từ 08:30 đến 21:00 hàng ngày. Mỗi khung giờ cách nhau 30 phút.
-        </p>
       </div>
 
       {/* 1. CHỌN NGÀY */}
@@ -97,20 +94,10 @@ export const DateTimeStep: React.FC<DateTimeStepProps> = ({
 
       {/* 2. CHỌN KHUNG GIỜ */}
       <div className="space-y-5 pt-2">
-        <div className="flex items-center justify-between">
+        <div>
           <label className="text-xs font-bold text-zinc-300 uppercase tracking-wider block">
             2. CHỌN KHUNG GIỜ (MỖI 30 PHÚT)
           </label>
-          <div className="flex items-center gap-4 text-xs text-zinc-400">
-            <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
-              <span>Có thể chọn</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-orange-500" />
-              <span>Đang chọn</span>
-            </span>
-          </div>
         </div>
 
         <div className="space-y-6">

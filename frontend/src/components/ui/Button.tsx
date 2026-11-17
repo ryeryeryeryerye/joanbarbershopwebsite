@@ -15,7 +15,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   // Hiệu ứng nảy nhẹ khi hover (-translate-y-1 và scale active)
   const baseStyles =
-    'inline-flex items-center justify-center font-medium rounded-md transition-all duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-bg disabled:opacity-50 disabled:pointer-events-none cursor-pointer transform hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:scale-95';
+    'inline-flex items-center justify-center font-medium rounded transition-all duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-bg disabled:opacity-50 disabled:pointer-events-none cursor-pointer transform hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:scale-95';
 
   const variants = {
     // Nút CTA cam chính: nảy lên và tăng độ sáng + đổ bóng cam

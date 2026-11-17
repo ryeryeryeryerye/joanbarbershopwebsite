@@ -92,8 +92,14 @@ const CancelConfirmModal: React.FC<CancelConfirmModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-dark-card border border-zinc-800 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl relative">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn cursor-pointer"
+      onClick={isSubmitting ? undefined : onClose}
+    >
+      <div
+        className="bg-dark-card border border-zinc-800 rounded max-w-md w-full p-6 space-y-5 shadow-2xl relative cursor-default"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           type="button"
           onClick={onClose}
@@ -207,8 +213,14 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-dark-card border border-zinc-800 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl relative">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn cursor-pointer"
+      onClick={isSubmitting ? undefined : onClose}
+    >
+      <div
+        className="bg-dark-card border border-zinc-800 rounded max-w-md w-full p-6 space-y-5 shadow-2xl relative cursor-default"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           type="button"
           onClick={onClose}
@@ -365,8 +377,14 @@ const EditAppointmentModal: React.FC<EditAppointmentModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-dark-card border border-zinc-800 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn cursor-pointer"
+      onClick={isSubmitting ? undefined : onClose}
+    >
+      <div
+        className="bg-dark-card border border-zinc-800 rounded max-w-lg w-full p-6 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto cursor-default"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           type="button"
           onClick={onClose}
@@ -563,7 +581,7 @@ function AppointmentCard({
             <span>Thợ: <strong className="text-zinc-200">{appt.barberName || 'Thợ Bất Kỳ'}</strong></span>
           </p>
         </div>
-        <span className={`text-[11px] font-semibold px-2.5 py-1 rounded-full border flex-shrink-0 ${cfg.className}`}>
+        <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded border flex-shrink-0 ${cfg.className}`}>
           {cfg.label}
         </span>
       </div>
@@ -673,7 +691,7 @@ export const AppointmentList: React.FC = () => {
           <div className="flex items-center gap-4">
             <Link
               to="/"
-              className="w-10 h-10 rounded-full flex items-center justify-center text-zinc-400 hover:text-white bg-zinc-900 border border-zinc-700 hover:border-cta-orange hover:bg-cta-orange transition-all duration-200 hover:-translate-y-0.5 active:scale-95"
+              className="w-10 h-10 rounded-lg flex items-center justify-center text-zinc-400 hover:text-white bg-zinc-900 border border-zinc-700 hover:border-cta-orange hover:bg-cta-orange transition-all duration-200 hover:-translate-y-0.5 active:scale-95"
               title="Về trang chủ"
             >
               <ArrowLeft className="w-5 h-5" />
@@ -689,7 +707,7 @@ export const AppointmentList: React.FC = () => {
             type="button"
             onClick={refetch}
             disabled={isLoading}
-            className="w-9 h-9 rounded-full flex items-center justify-center text-zinc-400 hover:text-white bg-zinc-900 border border-zinc-700 hover:border-zinc-500 transition-all duration-200 disabled:opacity-40"
+            className="w-9 h-9 rounded-lg flex items-center justify-center text-zinc-400 hover:text-white bg-zinc-900 border border-zinc-700 hover:border-zinc-500 transition-all duration-200 disabled:opacity-40"
             title="Làm mới"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
@@ -722,10 +740,10 @@ export const AppointmentList: React.FC = () => {
         {!isLoading && !error && appointments.length === 0 && (
           <div className="bg-dark-card border border-dark-border rounded-2xl p-14 flex flex-col items-center justify-center text-center gap-5">
             <div className="relative">
-              <div className="w-20 h-20 rounded-full bg-zinc-900 border border-zinc-700 flex items-center justify-center">
+              <div className="w-20 h-20 rounded bg-zinc-900 border border-zinc-700 flex items-center justify-center">
                 <CalendarCheck className="w-9 h-9 text-zinc-600" />
               </div>
-              <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-cta-orange/10 border border-cta-orange/40 flex items-center justify-center">
+              <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded bg-cta-orange/10 border border-cta-orange/40 flex items-center justify-center">
                 <Scissors className="w-3.5 h-3.5 text-cta-orange" />
               </div>
             </div>

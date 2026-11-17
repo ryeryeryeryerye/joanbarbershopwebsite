@@ -83,8 +83,8 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
 
   return (
     <>
-      <div className="group bg-dark-card border border-dark-border hover:border-zinc-500 rounded-xl overflow-hidden transition-all duration-300 flex flex-col hover:-translate-y-1.5 shadow-sm hover:shadow-xl hover:shadow-black/60">
-        {/* ẢNH DỊCH VỤ */}
+      <div className="group bg-dark-card border border-dark-border hover:border-zinc-500 rounded overflow-hidden transition-all duration-300 flex flex-col hover:-translate-y-1.5 shadow-sm hover:shadow-xl hover:shadow-black/60">
+        {/* ẢNH DỊCH VỤ - SẠCH SẼ HOÀN TOÀN, KHÔNG CÓ TEXT ĐÈ LÊN ẢNH */}
         <div className="relative aspect-[16/10] overflow-hidden bg-zinc-900">
           <img
             src={service.imageUrl}
@@ -92,29 +92,22 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
             className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-dark-card via-transparent to-transparent opacity-80" />
-
-          {/* Nhãn phân loại dịch vụ góc trên */}
-          {service.categoryName && (
-            <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded bg-black/80 backdrop-blur-md border border-zinc-700/80 text-[10px] font-bold text-orange-400 uppercase tracking-wider">
-              {service.categoryName}
-            </div>
-          )}
-          
-          {/* Thời lượng */}
-          <div className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded bg-black/75 backdrop-blur-md border border-zinc-700/60 text-[11px] font-medium text-zinc-300">
-            <Clock className="w-3 h-3 text-zinc-400" />
-            <span>{service.durationMinutes} phút</span>
-          </div>
         </div>
 
         {/* THÔNG TIN DỊCH VỤ */}
         <div className="p-5 flex-1 flex flex-col justify-between">
           <div>
-            <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-zinc-100 transition-colors tracking-tight line-clamp-1">
-              {service.name}
-            </h3>
-            <p className="mt-1.5 text-xs text-zinc-400 leading-relaxed line-clamp-2">
+            <div className="flex items-start justify-between gap-3">
+              <h3 className="text-base sm:text-lg font-bold text-white group-hover:text-zinc-100 transition-colors tracking-tight line-clamp-1">
+                {service.name}
+              </h3>
+              <span className="flex items-center gap-1 text-zinc-400 text-[11px] flex-shrink-0 mt-0.5">
+                <Clock className="w-3.5 h-3.5 text-white" />
+                <span className="text-orange-400 font-medium">{service.durationMinutes} phút</span>
+              </span>
+            </div>
+
+            <p className="mt-2 text-xs text-zinc-400 leading-relaxed line-clamp-2">
               {service.description}
             </p>
           </div>
@@ -123,7 +116,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
           <div className="mt-4 pt-3 border-t border-zinc-800/80 flex items-center justify-between gap-2">
             <div>
               <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">Giá dịch vụ</span>
-              <span className="text-base font-extrabold text-white tracking-tight">
+              <span className="text-base font-extrabold text-orange-400 tracking-tight">
                 {formatCurrency(service.price)}
               </span>
             </div>
@@ -150,104 +143,101 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
         </div>
       </div>
 
-      {/* MODAL CHI TIẾT DỊCH VỤ (POPUP THÔNG TIN ĐẦY ĐỦ) */}
+      {/* MODAL CHI TIẾT DỊCH VỤ (POPUP HÌNH CHỮ NHẬT CỐ ĐỊNH KÍCH THƯỚC ĐỒNG BỘ MỌI DỊCH VỤ) */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
-          <div className="relative w-full max-w-lg bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-            {/* Header Modal */}
-            <div className="relative aspect-[16/9] w-full overflow-hidden bg-zinc-950 flex-shrink-0">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm animate-fadeIn cursor-pointer"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-4xl bg-zinc-900 border border-zinc-700 rounded shadow-2xl overflow-hidden flex flex-col md:flex-row md:h-[590px] max-h-[90vh] cursor-default"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* NÚT ĐÓNG X GÓC TRÊN BÊN PHẢI */}
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-3.5 right-3.5 z-20 w-8 h-8 rounded bg-zinc-800/80 hover:bg-cta-orange text-zinc-300 hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer"
+              aria-label="Đóng"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            {/* CỘT BÊN TRÁI: ẢNH DỊCH VỤ - SẠCH SẼ HOÀN TOÀN, KHÔNG CÓ TEXT */}
+            <div className="relative w-full md:w-5/12 lg:w-1/2 bg-zinc-950 flex-shrink-0 min-h-[220px] md:h-full overflow-hidden">
               <img
                 src={service.imageUrl}
                 alt={service.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-center"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-black/60" />
-
-              {/* Nút đóng X */}
-              <button
-                type="button"
-                onClick={() => setIsModalOpen(false)}
-                className="absolute top-3.5 right-3.5 w-8 h-8 rounded-full bg-black/70 hover:bg-cta-orange text-white flex items-center justify-center transition-all duration-200 cursor-pointer"
-                aria-label="Đóng"
-              >
-                <X className="w-4 h-4" />
-              </button>
-
-              {/* Badge phân loại */}
-              {service.categoryName && (
-                <div className="absolute top-3.5 left-3.5 px-3 py-1 rounded bg-black/80 backdrop-blur-md border border-zinc-700 text-xs font-bold text-orange-400 uppercase tracking-wider">
-                  {service.categoryName}
-                </div>
-              )}
             </div>
 
-            {/* Nội dung chi tiết modal */}
-            <div className="p-6 overflow-y-auto space-y-5">
-              <div>
-                <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
-                  {service.name}
-                </h3>
-                <p className="mt-2 text-xs sm:text-sm text-zinc-300 leading-relaxed">
-                  {service.description}
-                </p>
-              </div>
+            {/* CỘT BÊN PHẢI: CHI TIẾT THÔNG TIN DỊCH VỤ */}
+            <div className="w-full md:w-7/12 lg:w-1/2 flex flex-col justify-between p-6 sm:p-7 overflow-y-auto md:h-full space-y-4">
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
+                    {service.name}
+                  </h3>
+                </div>
 
-              {/* Box 2 thông số: Thời gian phục vụ & Giá cả */}
-              <div className="grid grid-cols-2 gap-3 p-4 rounded-xl bg-zinc-950/80 border border-zinc-800">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-orange-400 flex-shrink-0">
-                    <Clock className="w-5 h-5" />
+                {/* Box 2 thông số: Thời gian phục vụ & Giá cả */}
+                <div className="grid grid-cols-2 gap-3 p-3.5 rounded bg-zinc-950/80 border border-zinc-800">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-white flex-shrink-0">
+                      <Clock className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">Thời lượng</span>
+                      <span className="text-xs sm:text-sm font-bold text-orange-400">{service.durationMinutes} phút</span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">Thời gian phục vụ</span>
-                    <span className="text-sm sm:text-base font-bold text-white">{service.durationMinutes} phút</span>
+
+                  <div className="flex items-center gap-3 border-l border-zinc-800 pl-3">
+                    <div className="w-9 h-9 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-white flex-shrink-0">
+                      <Scissors className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">Giá trọn gói</span>
+                      <span className="text-xs sm:text-sm font-extrabold text-orange-400">{formatCurrency(service.price)}</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 border-l border-zinc-800 pl-3">
-                  <div className="w-10 h-10 rounded-lg bg-orange-950/40 border border-orange-900/60 flex items-center justify-center text-orange-400 flex-shrink-0">
-                    <Scissors className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">Giá trọn gói</span>
-                    <span className="text-sm sm:text-base font-extrabold text-orange-400">{formatCurrency(service.price)}</span>
-                  </div>
+                {/* Chi tiết quy trình phục vụ - DÙNG LẠI THIẾT KẾ CŨ: DANH SÁCH DỌC */}
+                <div className="space-y-2.5">
+                  <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-white" />
+                    <span>QUY TRÌNH CÁC BƯỚC PHỤC VỤ CHI TIẾT</span>
+                  </h4>
+                  <ul className="space-y-2">
+                    {steps.map((step, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5 text-xs text-zinc-300">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-white flex-shrink-0 mt-0.5" />
+                        <span className="leading-snug">{step}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
 
-              {/* Chi tiết quy trình phục vụ */}
-              <div className="space-y-3">
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2 border-b border-zinc-800 pb-2">
-                  <ShieldCheck className="w-4 h-4 text-orange-400" />
-                  <span>Quy trình các bước phục vụ chi tiết</span>
-                </h4>
-                <ul className="space-y-2">
-                  {steps.map((step, idx) => (
-                    <li key={idx} className="flex items-start gap-2.5 text-xs text-zinc-300">
-                      <CheckCircle2 className="w-4 h-4 text-orange-500 flex-shrink-0 mt-0.5" />
-                      <span>{step}</span>
-                    </li>
-                  ))}
-                </ul>
+              {/* Footer Modal: Nút Đặt lịch & Đóng */}
+              <div className="pt-4 border-t border-zinc-800 flex items-center justify-end gap-3 flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 rounded text-xs font-semibold tracking-wider text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 transition-all uppercase cursor-pointer"
+                >
+                  ĐÓNG
+                </button>
+                <Link
+                  to={`/booking?serviceId=${service.id}`}
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-6 py-2 rounded text-xs font-bold tracking-wider text-white bg-cta-orange hover:bg-orange-600 shadow-md shadow-orange-950/40 hover:shadow-orange-500/30 transition-all uppercase transform hover:-translate-y-0.5"
+                >
+                  ĐẶT LỊCH GÓI NÀY
+                </Link>
               </div>
-            </div>
-
-            {/* Footer Modal: Nút Đặt lịch & Đóng */}
-            <div className="p-4 border-t border-zinc-800 bg-zinc-950/90 flex items-center justify-end gap-3 flex-shrink-0">
-              <button
-                type="button"
-                onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2.5 rounded-lg text-xs font-semibold tracking-wider text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 transition-all uppercase cursor-pointer"
-              >
-                ĐÓNG
-              </button>
-              <Link
-                to="/booking"
-                onClick={() => setIsModalOpen(false)}
-                className="px-6 py-2.5 rounded-lg text-xs font-bold tracking-wider text-white bg-cta-orange hover:bg-orange-600 shadow-md shadow-orange-950/40 hover:shadow-orange-500/30 transition-all uppercase transform hover:-translate-y-0.5"
-              >
-                ĐẶT LỊCH GÓI NÀY
-              </Link>
             </div>
           </div>
         </div>

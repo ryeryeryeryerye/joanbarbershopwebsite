@@ -30,7 +30,7 @@ export const CustomerInfoStep: React.FC<CustomerInfoStepProps> = ({ data, onChan
               <User className="w-4 h-4 text-orange-400" />
               <span>THÔNG TIN KHÁCH HÀNG</span>
             </h3>
-            <span className="text-[11px] text-zinc-400 bg-zinc-900 border border-zinc-800 px-2.5 py-0.5 rounded-full">
+            <span className="text-[11px] text-zinc-400 bg-zinc-900 border border-zinc-800 px-2.5 py-0.5 rounded">
               Tự động điền từ tài khoản
             </span>
           </div>

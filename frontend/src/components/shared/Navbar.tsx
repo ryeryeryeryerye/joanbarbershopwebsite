@@ -110,30 +110,28 @@ export const Navbar: React.FC = () => {
           })}
         </nav>
 
-        {/* PHẦN 3: ICON USER VÀ ICON 3 VẠCH BÊN PHẢI (HOVER CAM & NẢY LÊN) */}
-        <div className="w-40 sm:w-48 hidden md:flex items-center justify-end gap-2.5 flex-shrink-0">
+        {/* PHẦN 3: ICON USER VÀ ICON 3 VẠCH BÊN PHẢI (CHỈ ĐỂ ICON, KHÔNG VIỀN KHÔNG BOX VUÔNG) */}
+        <div className="w-40 sm:w-48 hidden md:flex items-center justify-end gap-2 flex-shrink-0">
           {/* GIỎ HÀNG / LỊCH ĐẶT */}
           <button
             type="button"
             title="Lịch đặt của bạn"
             onClick={handleCartClick}
-            className="w-10 h-10 rounded-full flex items-center justify-center text-zinc-300 hover:text-white bg-zinc-900 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg hover:shadow-orange-500/30 active:scale-95 cursor-pointer"
+            className="p-2 text-zinc-300 hover:text-orange-400 transition-all duration-200 transform hover:-translate-y-0.5 active:scale-95 cursor-pointer flex items-center justify-center"
           >
             <CalendarCheck className="w-5 h-5" />
           </button>
 
-          {/* MỤC USER / LOGIN: PFP CHỮ CÁI ĐẦU CỦA TÊN KHI ĐÃ ĐĂNG NHẬP */}
+          {/* MỤC USER / LOGIN: ICON USER (HOẶC AVATAR TRÒN KHI ĐÃ ĐĂNG NHẬP) */}
           <Link
             to={isAuthenticated ? '/profile' : '/auth/login'}
             title={isAuthenticated ? `Tài khoản: ${user?.name || ''}` : 'Đăng nhập tài khoản'}
-            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg hover:shadow-orange-500/30 active:scale-95 cursor-pointer ${
-              isAuthenticated
-                ? 'bg-zinc-800 text-white font-black text-sm border-2 border-cta-orange hover:bg-cta-orange shadow-md shadow-orange-950/40 select-none'
-                : 'text-zinc-300 hover:text-white bg-zinc-900 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange'
-            }`}
+            className="p-1.5 text-zinc-300 hover:text-orange-400 transition-all duration-200 transform hover:-translate-y-0.5 active:scale-95 cursor-pointer flex items-center justify-center"
           >
             {isAuthenticated ? (
-              <span className="leading-none">{getAccountInitial(user?.name)}</span>
+              <span className="w-8 h-8 rounded-full bg-zinc-800 text-white font-black text-xs border-2 border-cta-orange hover:border-orange-400 flex items-center justify-center select-none shadow-md shadow-orange-950/40">
+                {getAccountInitial(user?.name)}
+              </span>
             ) : (
               <User className="w-5 h-5" />
             )}
@@ -144,34 +142,32 @@ export const Navbar: React.FC = () => {
             type="button"
             title="Cài đặt & Tùy chọn"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="w-10 h-10 rounded-full flex items-center justify-center text-zinc-300 hover:text-white bg-zinc-900 hover:bg-cta-orange border border-zinc-700 hover:border-cta-orange transition-all duration-200 transform hover:-translate-y-1 hover:shadow-lg hover:shadow-orange-500/30 active:scale-95 cursor-pointer"
+            className="p-2 text-zinc-300 hover:text-orange-400 transition-all duration-200 transform hover:-translate-y-0.5 active:scale-95 cursor-pointer flex items-center justify-center"
           >
             <Menu className="w-5 h-5" />
           </button>
         </div>
 
         {/* MOBILE MENU TOGGLE (MÀN HÌNH NHỎ) */}
-        <div className="md:hidden flex items-center gap-2">
+        <div className="md:hidden flex items-center gap-1.5">
           {/* GIỎ HÀNG MOBILE */}
           <button
             type="button"
             title="Lịch đặt của bạn"
             onClick={handleCartClick}
-            className="w-9 h-9 rounded-full flex items-center justify-center text-zinc-400 hover:text-white hover:bg-cta-orange bg-zinc-900 border border-zinc-800 transition-all duration-200"
+            className="p-2 text-zinc-400 hover:text-orange-400 transition-colors flex items-center justify-center"
           >
-            <CalendarCheck className="w-4 h-4" />
+            <CalendarCheck className="w-5 h-5" />
           </button>
           <Link
             to={isAuthenticated ? '/profile' : '/auth/login'}
-            className={`w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 ${
-              isAuthenticated
-                ? 'bg-zinc-800 text-white font-black text-xs border-2 border-cta-orange'
-                : 'p-2 text-zinc-400 hover:text-white hover:bg-cta-orange bg-zinc-900 border border-zinc-800'
-            }`}
+            className="p-1.5 text-zinc-400 hover:text-orange-400 transition-colors flex items-center justify-center"
             title={isAuthenticated ? `Tài khoản: ${user?.name || ''}` : 'Đăng nhập'}
           >
             {isAuthenticated ? (
-              <span className="leading-none">{getAccountInitial(user?.name)}</span>
+              <span className="w-7 h-7 rounded-full bg-zinc-800 text-white font-black text-xs border border-cta-orange flex items-center justify-center">
+                {getAccountInitial(user?.name)}
+              </span>
             ) : (
               <User className="w-5 h-5" />
             )}
@@ -179,7 +175,7 @@ export const Navbar: React.FC = () => {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-zinc-400 hover:text-white hover:bg-cta-orange bg-zinc-900 border border-zinc-800 rounded-full transition-all duration-200 hover:-translate-y-0.5"
+            className="p-2 text-zinc-400 hover:text-orange-400 transition-colors flex items-center justify-center"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -198,7 +194,7 @@ export const Navbar: React.FC = () => {
                   key={link.name}
                   href={link.path}
                   onClick={(e) => handleNavClick(e, link)}
-                  className={`px-3 py-2 text-sm font-semibold tracking-wider rounded-md uppercase transition-all duration-200 ${
+                  className={`px-3 py-2 text-sm font-semibold tracking-wider rounded uppercase transition-all duration-200 ${
                     isSelected
                       ? 'bg-cta-orange text-white'
                       : 'text-zinc-300 hover:text-orange-400 bg-transparent'
@@ -213,7 +209,7 @@ export const Navbar: React.FC = () => {
             <Link
               to={isAuthenticated ? '/profile' : '/auth/login'}
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-2 px-6 py-2 text-xs font-semibold tracking-wider text-zinc-200 hover:text-white hover:bg-cta-orange bg-zinc-900 border border-zinc-700 hover:border-cta-orange rounded-md uppercase transition-all duration-200"
+              className="flex items-center justify-center gap-2 px-6 py-2 text-xs font-semibold tracking-wider text-zinc-200 hover:text-white hover:bg-cta-orange bg-zinc-900 border border-zinc-700 hover:border-cta-orange rounded uppercase transition-all duration-200"
             >
               {isAuthenticated ? (
                 <span className="w-5 h-5 rounded-full bg-zinc-800 border border-cta-orange text-white text-[11px] font-black flex items-center justify-center">
