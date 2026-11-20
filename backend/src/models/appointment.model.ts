@@ -6,6 +6,7 @@ export interface IAppointment extends Document {
   customerId: Types.ObjectId;
   barberId?: Types.ObjectId;
   serviceId?: Types.ObjectId;
+  bookingCode?: string;
   date: string;        // "YYYY-MM-DD"
   timeSlot: string;    // "HH:mm"
   status: AppointmentStatus;
@@ -25,6 +26,7 @@ const appointmentSchema = new Schema<IAppointment>(
     customerId:    { type: Schema.Types.ObjectId, ref: 'User', required: true },
     barberId:      { type: Schema.Types.ObjectId, ref: 'Barber', required: false },
     serviceId:     { type: Schema.Types.ObjectId, ref: 'Service', required: false },
+    bookingCode:   { type: String, trim: true },
     date:          { type: String, required: true },
     timeSlot:      { type: String, required: true },
     status: {

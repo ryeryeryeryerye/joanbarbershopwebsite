@@ -9,9 +9,14 @@ import {
   deleteAppointment,
   getAllAppointments,
   updateAppointmentStatus,
+  getBookedSlots,
 } from '../controllers/appointment.controller';
 
 const router = Router();
+
+// ── Public / Booking Availability ───────────────────────────
+// GET    /api/v1/appointments/booked-slots → Lấy các khung giờ đã có lịch
+router.get('/booked-slots', getBookedSlots);
 
 // ── Customer ────────────────────────────────────────────────
 // POST   /api/v1/appointments          → Tạo lịch hẹn mới

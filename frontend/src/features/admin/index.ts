@@ -1,5 +1,9 @@
 export * from './types/adminTypes';
 export * from './api/adminApi';
 export * from './components/AdminStats';
+export * from './components/AdminServicesTab';
+export * from './components/AdminBarbersTab';
+export * from './components/AdminScheduleTab';
+export * from './components/AdminAppointmentsTab';
+export * from './components/AdminPage';
 export * from './hooks/useAdmin';
-

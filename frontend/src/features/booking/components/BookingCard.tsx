@@ -110,6 +110,7 @@ export const BookingCard: React.FC = () => {
             <DateTimeStep
               selectedDate={bookingData.date}
               selectedTimeSlot={bookingData.timeSlot}
+              selectedBarberId={bookingData.barberId}
               onSelect={(dateTime) => updateBookingData(dateTime)}
             />
           )}

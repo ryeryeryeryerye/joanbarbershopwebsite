@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, User, CalendarCheck } from 'lucide-react';
+import { Menu, X, User, CalendarCheck, LayoutDashboard } from 'lucide-react';
 import logoImg from '@/assets/images/logo.jpg';
 import { useAuth } from '@/features/auth';
 
@@ -43,10 +43,14 @@ export const Navbar: React.FC = () => {
     setMobileMenuOpen(false);
 
     if (!link.hash) {
-      if (location.pathname === '/') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (link.path === '/') {
+        if (location.pathname === '/') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          navigate('/');
+        }
       } else {
-        navigate('/');
+        navigate(link.path);
       }
       return;
     }
@@ -112,6 +116,17 @@ export const Navbar: React.FC = () => {
 
         {/* PHẦN 3: ICON USER VÀ ICON 3 VẠCH BÊN PHẢI (CHỈ ĐỂ ICON, KHÔNG VIỀN KHÔNG BOX VUÔNG) */}
         <div className="w-40 sm:w-48 hidden md:flex items-center justify-end gap-2 flex-shrink-0">
+          {/* NÚT QUẢN TRỊ ADMIN CHO TÀI KHOẢN ADMIN */}
+          {user?.role === 'admin' && (
+            <Link
+              to="/admin"
+              title="Trang quản trị Admin"
+              className="p-2 text-zinc-300 hover:text-orange-400 transition-all duration-200 transform hover:-translate-y-0.5 active:scale-95 cursor-pointer flex items-center justify-center"
+            >
+              <LayoutDashboard className="w-5 h-5" />
+            </Link>
+          )}
+
           {/* GIỎ HÀNG / LỊCH ĐẶT */}
           <button
             type="button"
@@ -150,6 +165,17 @@ export const Navbar: React.FC = () => {
 
         {/* MOBILE MENU TOGGLE (MÀN HÌNH NHỎ) */}
         <div className="md:hidden flex items-center gap-1.5">
+          {/* QUẢN TRỊ ADMIN TRÊN MOBILE */}
+          {user?.role === 'admin' && (
+            <Link
+              to="/admin"
+              title="Quản trị"
+              className="p-2 text-zinc-400 hover:text-orange-400 transition-colors flex items-center justify-center"
+            >
+              <LayoutDashboard className="w-5 h-5" />
+            </Link>
+          )}
+
           {/* GIỎ HÀNG MOBILE */}
           <button
             type="button"
@@ -185,8 +211,8 @@ export const Navbar: React.FC = () => {
 
       {/* MOBILE MENU DROPDOWN */}
       {mobileMenuOpen && (
-        <div className="border-b border-dark-border bg-dark-surface px-4 py-5 space-y-3 animate-fadeIn">
-          <nav className="flex flex-col space-y-2 max-w-md mx-auto">
+        <div className="border-b border-dark-border bg-dark-surface px-4 py-4 space-y-2 animate-fadeIn">
+          <nav className="flex flex-col space-y-1.5 max-w-md mx-auto">
             {navLinks.map((link) => {
               const isSelected = activeNav === link.name;
               return (
@@ -205,22 +231,6 @@ export const Navbar: React.FC = () => {
               );
             })}
           </nav>
-          <div className="pt-3 border-t border-zinc-800 flex items-center justify-center gap-4 max-w-md mx-auto">
-            <Link
-              to={isAuthenticated ? '/profile' : '/auth/login'}
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-2 px-6 py-2 text-xs font-semibold tracking-wider text-zinc-200 hover:text-white hover:bg-cta-orange bg-zinc-900 border border-zinc-700 hover:border-cta-orange rounded uppercase transition-all duration-200"
-            >
-              {isAuthenticated ? (
-                <span className="w-5 h-5 rounded-full bg-zinc-800 border border-cta-orange text-white text-[11px] font-black flex items-center justify-center">
-                  {getAccountInitial(user?.name)}
-                </span>
-              ) : (
-                <User className="w-4 h-4" />
-              )}
-              <span>{isAuthenticated ? user?.name || 'TÀI KHOẢN' : 'ĐĂNG NHẬP'}</span>
-            </Link>
-          </div>
         </div>
       )}
     </header>

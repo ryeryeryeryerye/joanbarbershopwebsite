@@ -1,13 +1,22 @@
-import React from 'react';
-import { Calendar, Clock } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Calendar, Clock, Lock } from 'lucide-react';
 import { BookingStepData } from '../types/bookingTypes';
 import { SHOP_TIME_PERIODS } from '../constants/timeSlots';
+import { axiosClient } from '@/lib';
 
 interface DateTimeStepProps {
   selectedDate?: string;
   selectedTimeSlot?: string;
+  selectedBarberId?: string;
   onSelect: (dateTime: Partial<BookingStepData>) => void;
 }
+
+const formatLocalDate = (d: Date): string => {
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
 // Hàm sinh danh sách 7 ngày kể từ hôm nay
 const getNext7Days = () => {
@@ -16,7 +25,7 @@ const getNext7Days = () => {
   for (let i = 0; i < 7; i++) {
     const d = new Date();
     d.setDate(d.getDate() + i);
-    const dateStr = d.toISOString().split('T')[0];
+    const dateStr = formatLocalDate(d);
     const isToday = i === 0;
     const isTomorrow = i === 1;
     let label = `${dayNames[d.getDay()]}, ${d.getDate()}/${d.getMonth() + 1}`;
@@ -38,10 +47,37 @@ const getNext7Days = () => {
 export const DateTimeStep: React.FC<DateTimeStepProps> = ({
   selectedDate,
   selectedTimeSlot,
+  selectedBarberId,
   onSelect,
 }) => {
   const daysList = getNext7Days();
   const currentDate = selectedDate || daysList[0].dateStr;
+  const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+
+  useEffect(() => {
+    let mounted = true;
+    axiosClient
+      .get('/appointments/booked-slots', {
+        params: {
+          date: currentDate,
+          barberId: selectedBarberId,
+        },
+      })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((res: any) => {
+        const slots = res?.data || res;
+        if (mounted && Array.isArray(slots)) {
+          setBookedSlots(slots);
+        }
+      })
+      .catch(() => {
+        // ignore
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [currentDate, selectedBarberId]);
 
   return (
     <div className="space-y-8">
@@ -116,18 +152,28 @@ export const DateTimeStep: React.FC<DateTimeStepProps> = ({
                 <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
                   {period.slots.map((slot) => {
                     const isSelected = selectedTimeSlot === slot.time;
+                    const isBooked = bookedSlots.includes(slot.time);
+
                     return (
                       <button
                         key={slot.time}
                         type="button"
+                        disabled={isBooked}
                         onClick={() => onSelect({ timeSlot: slot.time })}
-                        className={`py-2 px-2.5 rounded-lg border text-xs font-bold transition-all duration-200 transform hover:-translate-y-0.5 text-center ${
-                          isSelected
-                            ? 'bg-cta-orange border-cta-orange text-white shadow-md shadow-orange-950/40 ring-1 ring-orange-500'
-                            : 'bg-zinc-900 border-zinc-800 text-zinc-300 hover:border-cta-orange hover:text-white hover:bg-zinc-800'
+                        title={isBooked ? 'Khung giờ này đã kín lịch' : slot.time}
+                        className={`py-2 px-2.5 rounded-lg border text-xs font-bold transition-all duration-200 text-center ${
+                          isBooked
+                            ? 'bg-zinc-950/70 border-zinc-800 text-zinc-600 cursor-not-allowed line-through opacity-50'
+                            : isSelected
+                            ? 'bg-cta-orange border-cta-orange text-white shadow-md shadow-orange-950/40 ring-1 ring-orange-500 transform hover:-translate-y-0.5'
+                            : 'bg-zinc-900 border-zinc-800 text-zinc-300 hover:border-cta-orange hover:text-white hover:bg-zinc-800 transform hover:-translate-y-0.5'
                         }`}
                       >
-                        <Clock className="w-3 h-3 inline mr-1 opacity-70" />
+                        {isBooked ? (
+                          <Lock className="w-3 h-3 inline mr-1 opacity-50" />
+                        ) : (
+                          <Clock className="w-3 h-3 inline mr-1 opacity-70" />
+                        )}
                         <span>{slot.time}</span>
                       </button>
                     );

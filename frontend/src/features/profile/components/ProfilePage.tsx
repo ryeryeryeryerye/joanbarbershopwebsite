@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { User, Phone, Shield, LogOut, Check, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui';
 import { useAuth } from '@/features/auth';
@@ -217,6 +217,17 @@ export const ProfilePage: React.FC = () => {
                 >
                   CHỈNH SỬA THÔNG TIN
                 </Button>
+              )}
+
+              {/* Link Quản trị cho Admin */}
+              {user?.role === 'admin' && (
+                <Link
+                  to="/admin"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-semibold tracking-wider text-orange-400 hover:text-white bg-orange-950/30 hover:bg-cta-orange border border-orange-900/60 hover:border-cta-orange rounded uppercase transition-all duration-200 transform hover:-translate-y-0.5 cursor-pointer"
+                >
+                  <Shield className="w-4 h-4" />
+                  <span>TRANG QUẢN TRỊ ADMIN</span>
+                </Link>
               )}
 
               {/* Nút Đăng xuất */}
